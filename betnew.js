@@ -1,10 +1,10 @@
 var request = require('request');
 const readlineSync = require('readline-sync');
 const delay = require('delay');
-var uuide, token;
+var uuide;
 
 var headers = {
-    'authorization': 'Bearer ' + token,
+    'authorization': 'Bearer ',
     'x-requested-with': 'XMLHttpRequest'
 };
 
@@ -14,6 +14,7 @@ form = {
 var x = 0;
 (async() => {
     await get_token();
+    console.log(headers);
     await delay(500);
     await get_sesi();
     console.log("Sesi Berhasil");
@@ -129,10 +130,10 @@ async function get_token() {
                 url: "https://akun.vip/wolf/token.txt"
             },
             function(e, r, body) {
-                headers = {
-                    'authorization': 'Bearer ' + token,
+                resolve(headers = {
+                    'authorization': 'Bearer ' + body,
                     'x-requested-with': 'XMLHttpRequest'
-                };
+                });
 
             });
 
