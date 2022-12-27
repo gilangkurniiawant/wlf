@@ -19,9 +19,11 @@ form = {
 };
 var x = 0;
 (async() => {
+    await get_sesi();
+    console.log("Sesi Berhasil");
     while (1) {
         bet();
-        await delay(100);
+        await delay(1000);
         x++;
 
 
@@ -43,13 +45,6 @@ async function bet() {
                 body = JSON.parse(body);
                 if (body.hasOwnProperty("bet")) {
                     console.log("| " + x + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount);
-                    if (body.bet.state == "win" && x > 25000) {
-                        console.log("---");
-                        x = 0;
-                        form = {
-                            uuid: "18213a7b-8fef-4d1b-9932-285590216f13"
-                        };
-                    }
                     resolve(1);
                 } else if (body.hasOwnProperty("error")) {
                     if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
