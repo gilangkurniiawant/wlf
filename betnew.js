@@ -85,9 +85,9 @@ async function get_sesi() {
                     "currency": "trx",
                     "game": "dice",
                     "amount": "0.00000001",
-                    "multiplier": "50",
+                    "multiplier": "1.98",
                     "rule": "under",
-                    "bet_value": "6",
+                    "bet_value": "50",
                     "config": [{
                         "command": [{
                             "name": "resetAmount"
@@ -113,7 +113,6 @@ async function get_sesi() {
             },
             function(e, r, body) {
                 body = JSON.parse(body);
-                console.log(body);
                 if (body.hasOwnProperty("autoBet")) {
                     form = {
                         uuid: body.autoBet.uuid
