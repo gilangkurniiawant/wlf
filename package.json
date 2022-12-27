@@ -1,0 +1,17 @@
+{
+  "name": "wolfbet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "delay": "^5.0.0",
+    "readline-sync": "^1.4.10",
+    "request": "^2.88.2"
+  }
+}
