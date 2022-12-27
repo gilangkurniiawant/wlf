@@ -14,12 +14,11 @@ form = {
 var x = 0;
 (async() => {
     await get_token();
-    await delay(500);
     await get_sesi();
     console.log("Sesi Berhasil");
     while (1) {
         bet();
-        await delay(500);
+        await delay(1000);
         x++;
 
 
