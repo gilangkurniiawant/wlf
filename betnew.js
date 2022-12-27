@@ -14,7 +14,6 @@ form = {
 var x = 0;
 (async() => {
     await get_token();
-    console.log(headers);
     await delay(500);
     await get_sesi();
     console.log("Sesi Berhasil");
