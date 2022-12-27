@@ -23,7 +23,7 @@ var x = 0;
     console.log("Sesi Berhasil");
     while (1) {
         bet();
-        await delay(50);
+        await delay(360);
         x++;
 
 
