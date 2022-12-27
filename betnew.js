@@ -84,8 +84,8 @@ async function get_sesi() {
                 form: {
                     "currency": "trx",
                     "game": "dice",
-                    "amount": "0.0000001",
-                    "multiplier": "16.5",
+                    "amount": "0.00000001",
+                    "multiplier": "50",
                     "rule": "under",
                     "bet_value": "6",
                     "config": [{
@@ -100,7 +100,7 @@ async function get_sesi() {
                     }, {
                         "command": [{
                             "name": "increaseAmountPercent",
-                            "value": 8
+                            "value": 100
                         }],
                         "when": [{
                             "name": "lose",
