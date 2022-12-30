@@ -73,12 +73,12 @@ async function bet(das_token, cnom) {
 
                                 resolve(0);
                             } else {
-                                console.log("Gagal : " + body);
+                                console.log("Gagal : " + JSON.stringify(body));
                                 resolve(0);
                             }
 
                         } else {
-                            console.log("Gagal : " + body);
+                            console.log("Gagal : " + JSON.stringify(body));
                             resolve(0);
                         }
                     } catch (e) {
