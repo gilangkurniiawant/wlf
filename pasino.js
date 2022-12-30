@@ -57,17 +57,24 @@ async function bet(nomer, bet_amt, jumx) {
                 headers: headers
             },
             async function(e, r, body) {
-                if (e) {
+                try {
+                    if (e) {
+                        console.log("Gagal : " + e);
+                    }
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("message")) {
+                        bet_amt = await perhiutngan(nomer, body, jumx);
+                        nomer++;
+                        bet(nomer, bet_amt, jumx);
+                    } else {
+                        console.log("Gagal : " + JSON.stringify(body));
+                        bet(nomer, bet_amt, jumx);
+                    }
+                } catch (e) {
                     console.log("Gagal : " + e);
-                }
-                body = JSON.parse(body);
-                if (body.hasOwnProperty("message")) {
-                    bet_amt = await perhiutngan(nomer, body, jumx);
-                    nomer++;
-                    bet(nomer, bet_amt, jumx);
-                } else {
-                    console.log("Gagal : " + JSON.stringify(body));
-                    bet(nomer, bet_amt, jumx);
+                    await get_token();
+                    bet(0, base_bet, jum);
+
                 }
 
 
