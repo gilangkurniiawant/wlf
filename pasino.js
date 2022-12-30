@@ -65,24 +65,22 @@ async function bet(nomer, bet_amt, jumx) {
                         console.log("Gagal : " + e);
                     }
                     body = JSON.parse(body);
-                    if (body.hasOwnProperty("message")) {
-                        bet_amt = await perhiutngan(nomer, body, jumx);
+                    if (body.hasOwnProperty("profit")) {
+                        bet_amt_2 = await perhiutngan(nomer, body, jumx);
                         if (bet_amt == undefined) {
                             bet_amt = base_bet;
+                        } else {
+                            bet_amt = bet_amt_2;
                         }
                         nomer++;
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        console.log("Gagal : " + JSON.stringify(body));
-                        if (bet_amt == undefined) {
-                            bet_amt = base_bet;
-                        }
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
                     await get_token();
-                    bet(0, base_bet, jum);
+                    bet(0, bet_amt, jum);
 
                 }
 
