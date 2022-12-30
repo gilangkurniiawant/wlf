@@ -15,7 +15,6 @@ jum_sesi = 15;
 x = 0;
 (async() => {
     await get_token();
-    console.log("Token Berhasil : " + JSON.stringify(headers));
     for (let cs = 0; cs < jum_sesi; cs++) {
         await get_sesi(cs);
     }
