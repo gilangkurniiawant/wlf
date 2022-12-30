@@ -40,6 +40,9 @@ async function bet(nomer, bet_amt, jumx) {
 
         request.post({
                 url: 'https://api.pasino.io/dice/play',
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
                 form: JSON.stringify({
                     "token": token,
                     "language": "en",
