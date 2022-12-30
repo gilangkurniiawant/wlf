@@ -17,7 +17,6 @@ if (jum_sesi == "") {
 console.log(jum_sesi);
 
 
-jum_sesi = 5;
 x = 0;
 (async() => {
     await get_token();
