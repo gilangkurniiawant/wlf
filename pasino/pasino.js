@@ -7,9 +7,14 @@ var headers = {
 };
 
 
-//
 var base_bet = 0.1,
-    jum_sesi = 100;
+    jum_sesi = process.argv.slice(2);
+
+if (jum_sesi == "") {
+    console.log("Sesi Tidak Ditemiukan");
+    process.exit();
+}
+console.log(jum_sesi);
 
 
 jum_sesi = 5;
@@ -18,7 +23,7 @@ x = 0;
     await get_token();
 
     for (let jum = 0; jum < jum_sesi; jum++) {
-        bet(0, base_bet);
+        bet(0, base_bet, jum);
     }
     while (1) {
         await delay(60 * 1000);
@@ -28,7 +33,7 @@ x = 0;
 
 
 
-async function bet(nomer, bet_amt) {
+async function bet(nomer, bet_amt, jumx) {
 
     await new Promise((resolve, reject) => {
 
@@ -52,12 +57,12 @@ async function bet(nomer, bet_amt) {
 
                 body = JSON.parse(body);
                 if (body.hasOwnProperty("message")) {
-                    bet_amt = await perhiutngan(nomer, body);
+                    bet_amt = await perhiutngan(nomer, body, jumx);
                     nomer++;
-                    bet(nomer, bet_amt);
+                    bet(nomer, bet_amt, jumx);
                 } else {
                     console.log("Gagal : " + JSON.stringify(body));
-                    bet(nomer, bet_amt);
+                    bet(nomer, bet_amt, jumx);
                 }
 
 
@@ -70,15 +75,15 @@ async function bet(nomer, bet_amt) {
 }
 
 
-async function perhiutngan(nomer, bet) {
+async function perhiutngan(nomer, bet, jumx) {
     var nextbet;
     if (bet.hasOwnProperty("profit")) {
         if (bet.profit > 0) {
-            console.log("|Win " + nomer + " " + bet.profit + " | " + bet.balance);
+            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance);
             nextbet = base_bet;
 
         } else {
-            console.log("|Lose " + nomer + " " + bet.profit + " | " + bet.balance);
+            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance);
             nextbet = Math.abs(bet.profit) * 2;
         }
     } else if (bet.hasOwnProperty("message")) {
