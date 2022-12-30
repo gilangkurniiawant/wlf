@@ -151,7 +151,10 @@ async function get_token() {
 
 
         request.get({
-                url: "https://akun.vip/wolf/token.txt"
+                url: "https://akun.vip/wolf/token.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
             },
             function(e, r, body) {
                 if (e) {
