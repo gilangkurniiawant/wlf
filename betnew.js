@@ -131,16 +131,21 @@ async function get_sesi(ds) {
                 headers: headers
             },
             function(e, r, body) {
+                try {
 
-                console.log(body);
-                body = JSON.parse(body);
-                if (body.hasOwnProperty("autoBet")) {
-                    data_sesi[ds] = body.autoBet.uuid;
-                    sesi = 1;
+
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("autoBet")) {
+                        data_sesi[ds] = body.autoBet.uuid;
+                        sesi = 1;
+                        resolve(1);
+                    } else {
+                        resolve(1);
+                        //  get_sesi();
+                    }
+                } catch (e) {
+                    console.log("Gagal Mendapatkan Sesi : " + e);
                     resolve(1);
-                } else {
-                    resolve(1);
-                    //  get_sesi();
                 }
 
             });
