@@ -14,29 +14,33 @@ var headers = {
 jum_sesi = 15;
 x = 0;
 (async() => {
-    await get_token();
-    for (let cs = 0; cs < jum_sesi; cs++) {
-        await get_sesi(cs);
-    }
-    console.log("Sesi Berhasil");
-    var cst = 0;
-    while (1) {
-        let d = new Date();
-        let minutes = d.getMinutes();
-        if (minutes == 30 || minutes == 30 || minutes == 59) {
-            console.log("Delay 1 menit");
-            await delay(90000);
+    try {
+        await get_token();
+        for (let cs = 0; cs < jum_sesi; cs++) {
+            await get_sesi(cs);
         }
-        if (data_sesi[cst]) {
-            bet(data_sesi[cst], cst);
-            await delay(60);
-            if (cst >= (jum_sesi - 1)) {
-                cst = 0;
-                continue;
+        console.log("Sesi Berhasil");
+        var cst = 0;
+        while (1) {
+            let d = new Date();
+            let minutes = d.getMinutes();
+            if (minutes == 30 || minutes == 30 || minutes == 59) {
+                console.log("Delay 1 menit");
+                await delay(90000);
             }
+            if (data_sesi[cst]) {
+                bet(data_sesi[cst], cst);
+                await delay(60);
+                if (cst >= (jum_sesi - 1)) {
+                    cst = 0;
+                    continue;
+                }
+            }
+            cst++;
+            x++;
         }
-        cst++;
-        x++;
+    } catch (e) {
+        console.log("Error : " + e);
     }
 })();
 
