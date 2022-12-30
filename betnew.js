@@ -8,7 +8,7 @@ var headers = {
     'authorization': 'Bearer ',
     'x-requested-with': 'XMLHttpRequest'
 };
-const d = new Date();
+
 
 
 jum_sesi = 15;
@@ -21,10 +21,11 @@ x = 0;
     console.log("Sesi Berhasil");
     var cst = 0;
     while (1) {
+        let d = new Date();
         let minutes = d.getMinutes();
-        if (minutes == 10 || minutes == 30 || minutes == 59) {
+        if (minutes == 33 || minutes == 30 || minutes == 59) {
             console.log("Delay 1 menit");
-            await delay(60000);
+            await delay(63000);
         }
         if (data_sesi[cst]) {
             bet(data_sesi[cst], cst);
