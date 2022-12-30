@@ -54,7 +54,9 @@ async function bet(nomer, bet_amt, jumx) {
                 headers: headers
             },
             async function(e, r, body) {
-
+                if (e) {
+                    console.log("Gagal : " + e);
+                }
                 body = JSON.parse(body);
                 if (body.hasOwnProperty("message")) {
                     bet_amt = await perhiutngan(nomer, body, jumx);
