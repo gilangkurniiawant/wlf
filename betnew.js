@@ -7,7 +7,7 @@ var headers = {
 };
 
 
-var base_bet = 0.000001,
+var base_bet = "0.000001",
     jum_sesi = process.argv.slice(2);
 
 if (jum_sesi == "") {
