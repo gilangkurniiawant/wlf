@@ -21,7 +21,7 @@ x = 0;
         bet(0, base_bet);
     }
     while (1) {
-        await delay(10 * 60 * 1000);
+        await delay(60 * 1000);
         await get_token();
     }
 })();
