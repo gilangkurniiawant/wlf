@@ -11,7 +11,7 @@ var headers = {
 
 
 
-jum_sesi = 15;
+jum_sesi = 3;
 x = 0;
 (async() => {
     await get_token();
@@ -23,9 +23,9 @@ x = 0;
     while (1) {
         let d = new Date();
         let minutes = d.getMinutes();
-        if (minutes == 33 || minutes == 30 || minutes == 59) {
+        if (minutes == 30 || minutes == 30 || minutes == 59) {
             console.log("Delay 1 menit");
-            await delay(63000);
+            await delay(90000);
         }
         if (data_sesi[cst]) {
             bet(data_sesi[cst], cst);
