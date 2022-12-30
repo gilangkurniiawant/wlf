@@ -33,6 +33,9 @@ x = 0;
 
 
 async function bet(nomer, bet_amt, jumx) {
+    if (bet_amt == undefined) {
+        bet_amt = base_bet;
+    }
 
     await new Promise((resolve, reject) => {
 
@@ -64,10 +67,16 @@ async function bet(nomer, bet_amt, jumx) {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("message")) {
                         bet_amt = await perhiutngan(nomer, body, jumx);
+                        if (bet_amt == undefined) {
+                            bet_amt = base_bet;
+                        }
                         nomer++;
                         bet(nomer, bet_amt, jumx);
                     } else {
                         console.log("Gagal : " + JSON.stringify(body));
+                        if (bet_amt == undefined) {
+                            bet_amt = base_bet;
+                        }
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
