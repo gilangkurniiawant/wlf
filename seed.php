@@ -165,7 +165,7 @@ seed();
 kseed();
 tele(saldo());
 
-sleep(3);
+sleep(60);
 $x++;
 if ($x > 5) {
     $x = 0;
