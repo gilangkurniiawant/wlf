@@ -1,7 +1,7 @@
 var request = require('request');
 const readlineSync = require('readline-sync');
 const delay = require('delay');
-var uuide;
+var uuide, sesi = 1;
 
 var headers = {
     'authorization': 'Bearer ',
@@ -14,11 +14,12 @@ form = {
 var x = 0;
 (async() => {
     await get_token();
+    await delay(500);
     await get_sesi();
     console.log("Sesi Berhasil");
     while (1) {
         bet();
-        await delay(1000);
+        await delay(500);
         x++;
 
 
@@ -30,35 +31,42 @@ async function bet() {
     await new Promise((resolve) => {
 
 
+        if (sesi == 1) {
+            request.post({
+                    url: 'https://wolf.bet/api/v2/dice/auto/play/',
+                    form: form,
+                    headers: headers
+                },
+                async function(e, r, body) {
+                    try {
+                        body = JSON.parse(body);
+                        if (body.hasOwnProperty("bet")) {
+                            console.log("| " + x + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount);
+                            resolve(1);
+                        } else if (body.hasOwnProperty("error")) {
+                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
+                                console.log("Sesi Berakhir");
+                                sesi = 0;
 
-        request.post({
-                url: 'https://wolf.bet/api/v2/dice/auto/play',
-                form: form,
-                headers: headers
-            },
-            async function(e, r, body) {
-                body = JSON.parse(body);
-                if (body.hasOwnProperty("bet")) {
-                    console.log("| " + x + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount);
-                    resolve(1);
-                } else if (body.hasOwnProperty("error")) {
-                    if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
-                        console.log("Sesi Berakhir");
+                                await get_sesi();
 
-                        await get_sesi();
+                                resolve(0);
+                            } else {
+                                console.log("Gagal : " + body);
+                                resolve(0);
+                            }
 
-                        resolve(0);
-                    } else {
-                        console.log("Gagal : " + body);
+                        } else {
+                            console.log("Gagal : " + body);
+                            resolve(0);
+                        }
+                    } catch (e) {
+                        console.log("Gagal : " + e);
                         resolve(0);
                     }
 
-                } else {
-                    console.log("Gagal : " + body);
-                    resolve(0);
-                }
-
-            });
+                });
+        }
 
     });
 
@@ -102,11 +110,14 @@ async function get_sesi() {
                 headers: headers
             },
             function(e, r, body) {
+
+                console.log(body);
                 body = JSON.parse(body);
                 if (body.hasOwnProperty("autoBet")) {
                     form = {
                         uuid: body.autoBet.uuid
                     };
+                    sesi = 1;
                     resolve(1);
                 } else {
                     resolve(1);
