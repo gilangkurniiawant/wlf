@@ -150,10 +150,13 @@ async function get_token() {
     await new Promise((resolve) => {
 
 
-        request.post({
+        request.get({
                 url: "https://akun.vip/wolf/token.txt"
             },
             function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Token : " + e);
+                }
                 resolve(headers = {
                     'authorization': 'Bearer ' + body,
                     'x-requested-with': 'XMLHttpRequest'
