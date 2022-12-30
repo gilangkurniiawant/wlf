@@ -1,158 +1,107 @@
 var request = require('request');
 const readlineSync = require('readline-sync');
 const delay = require('delay');
-var uuide, sesi = 1,
-    data_sesi = [];
 
 var headers = {
-    'authorization': 'Bearer ',
-    'x-requested-with': 'XMLHttpRequest'
+
 };
 
 
+var base_bet = 0.000001,
+    jum_sesi = process.argv.slice(2);
 
-jum_sesi = 15;
+if (jum_sesi == "") {
+    console.log("Sesi Tidak Ditemiukan");
+    process.exit();
+}
+console.log(jum_sesi);
+
+
+jum_sesi = 5;
 x = 0;
 (async() => {
-    try {
+    await get_token();
+
+    for (let jum = 0; jum < jum_sesi; jum++) {
+        bet(0, base_bet, jum);
+    }
+    while (1) {
+        await delay(60 * 1000);
         await get_token();
-        for (let cs = 0; cs < jum_sesi; cs++) {
-            await get_sesi(cs);
-        }
-        console.log("Sesi Berhasil");
-        var cst = 0;
-        while (1) {
-            let d = new Date();
-            let minutes = d.getMinutes();
-            if (minutes == 30 || minutes == 30 || minutes == 59) {
-                console.log("Delay 1 menit");
-                await delay(90000);
-            }
-            if (data_sesi[cst]) {
-                bet(data_sesi[cst], cst);
-                await delay(60);
-                if (cst >= (jum_sesi - 1)) {
-                    cst = 0;
-                    continue;
-                }
-            }
-            cst++;
-            x++;
-        }
-    } catch (e) {
-        console.log("Error : " + e);
     }
 })();
 
-async function bet(das_token, cnom) {
-
-    await new Promise((resolve) => {
 
 
-        if (sesi == 1) {
-            request.post({
-                    url: 'https://wolf.bet/api/v2/dice/auto/play/',
-                    form: {
-                        uuid: das_token
-                    },
-                    headers: headers
-                },
-                async function(e, r, body) {
-                    try {
-                        body = JSON.parse(body);
-                        if (body.hasOwnProperty("bet")) {
-                            console.log("| " + x + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + cnom + " " + das_token);
-                            resolve(1);
-                        } else if (body.hasOwnProperty("error")) {
-                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
-                                console.log("Sesi Berakhir");
+async function bet(nomer, bet_amt, jumx) {
 
-                                sesi = 0;
-                                data_sesi[cnom] = 0;
-                                await get_sesi(cnom);
-
-                                resolve(0);
-                            } else {
-                                console.log("Gagal : " + JSON.stringify(body));
-                                resolve(0);
-                            }
-
-                        } else {
-                            console.log("Gagal : " + JSON.stringify(body));
-                            resolve(0);
-                        }
-                    } catch (e) {
-                        console.log("Gagal : " + e);
-                        resolve(0);
-                    }
-
-                });
-        }
-
-    });
-
-}
-
-async function get_sesi(ds) {
-
-    await new Promise((resolve) => {
+    await new Promise((resolve, reject) => {
 
 
         request.post({
-                url: "https://wolf.bet/api/v2/dice/auto/start",
-                form: {
-                    "currency": "trx",
-                    "game": "dice",
-                    "amount": "0.00000001",
-                    "multiplier": "1.98",
-                    "rule": "under",
-                    "bet_value": "50",
-                    "config": [{
-                        "command": [{
-                            "name": "resetAmount"
-                        }],
-                        "when": [{
-                            "name": "win",
-                            "value": 1,
-                            "type": "every"
-                        }]
-                    }, {
-                        "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": 100
-                        }],
-                        "when": [{
-                            "name": "lose",
-                            "value": 1,
-                            "type": "every"
-                        }]
-                    }]
-                },
+                url: 'https://api.pasino.io/dice/play',
+                form: JSON.stringify({
+                    "token": token,
+                    "language": "en",
+                    "bet_amt": bet_amt.toString(),
+                    "coin": "TRX",
+                    "type": 2,
+                    "payout": "2",
+                    "winning_chance": "47.50",
+                    "profit": bet_amt.toString(),
+                    "client_seed": "dsadsad"
+                }),
                 headers: headers
             },
-            function(e, r, body) {
-                try {
+            async function(e, r, body) {
 
-
-                    body = JSON.parse(body);
-                    if (body.hasOwnProperty("autoBet")) {
-                        data_sesi[ds] = body.autoBet.uuid;
-                        sesi = 1;
-                        resolve(1);
-                    } else {
-                        resolve(1);
-                        //  get_sesi();
-                    }
-                } catch (e) {
-                    console.log("Gagal Mendapatkan Sesi : " + e);
-                    resolve(1);
+                body = JSON.parse(body);
+                if (body.hasOwnProperty("message")) {
+                    bet_amt = await perhiutngan(nomer, body, jumx);
+                    nomer++;
+                    bet(nomer, bet_amt, jumx);
+                } else {
+                    console.log("Gagal : " + JSON.stringify(body));
+                    bet(nomer, bet_amt, jumx);
                 }
+
 
             });
 
+
     });
 
+
 }
+
+
+async function perhiutngan(nomer, bet, jumx) {
+    var nextbet;
+    if (bet.hasOwnProperty("profit")) {
+        if (bet.profit > 0) {
+            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance);
+            nextbet = base_bet;
+
+        } else {
+            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance);
+            nextbet = Math.abs(bet.profit) * 2;
+        }
+    } else if (bet.hasOwnProperty("message")) {
+        if (bet.message.includes("Please select the game configuration correctly")) {
+            cari = bet.message.split("Please select the game configuration correctly.--")[1];
+            cari = cari.split(" -- ");
+
+            nextbet = cari[0];
+            console.log(nextbet);
+        }
+
+    }
+
+    return nextbet;
+
+
+}
+
 
 async function get_token() {
 
@@ -160,7 +109,7 @@ async function get_token() {
 
 
         request.get({
-                url: "https://akun.vip/wolf/token.txt",
+                url: "https://akun.vip/pasino/token.txt",
                 agentOptions: {
                     rejectUnauthorized: false
                 }
@@ -169,10 +118,7 @@ async function get_token() {
                 if (e) {
                     console.log("Gagal Mendapatkan Token : " + e);
                 }
-                resolve(headers = {
-                    'authorization': 'Bearer ' + body,
-                    'x-requested-with': 'XMLHttpRequest'
-                });
+                resolve(token = body);
 
             });
 
