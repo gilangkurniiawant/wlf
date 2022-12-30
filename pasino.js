@@ -51,7 +51,8 @@ async function bet(nomer, bet_amt, jumx) {
                     "payout": "2",
                     "winning_chance": "47.50",
                     "profit": bet_amt.toString(),
-                    "client_seed": "dsadsad"
+                    "client_seed": Math.random().toString(36).slice(2)
+
                 }),
                 headers: headers
             },
