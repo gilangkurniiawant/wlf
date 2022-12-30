@@ -11,7 +11,7 @@ var headers = {
 
 
 
-jum_sesi = 3;
+jum_sesi = 15;
 x = 0;
 (async() => {
     await get_token();
