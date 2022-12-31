@@ -7,9 +7,8 @@ var headers = {
 };
 
 
-var base_bet = "0.000001",
+var base_bet,
     jum_sesi = process.argv.slice(2);
-
 if (jum_sesi == "") {
     console.log("Sesi Tidak Ditemiukan");
     process.exit();
@@ -20,6 +19,7 @@ console.log(jum_sesi);
 x = 0;
 (async() => {
     await get_token();
+    await get_bet();
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
@@ -27,6 +27,7 @@ x = 0;
     while (1) {
         await delay(60 * 1000);
         await get_token();
+        await get_bet();
     }
 })();
 
@@ -75,6 +76,7 @@ async function bet(nomer, bet_amt, jumx) {
                         nomer++;
                         bet(nomer, bet_amt, jumx);
                     } else {
+                        console.log(body);
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
@@ -112,9 +114,13 @@ async function perhiutngan(nomer, bet, jumx) {
 
             nextbet = cari[0];
             console.log(nextbet);
+        } else {
+            console.log(bet)
         }
-
+    } else {
+        console.log(bet)
     }
+
 
     return nextbet;
 
@@ -138,6 +144,31 @@ async function get_token() {
                     console.log("Gagal Mendapatkan Token : " + e);
                 }
                 resolve(token = body);
+
+            });
+
+    });
+
+}
+
+async function get_bet() {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/pasino/bet.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Token : " + e);
+                    get_bet();
+                } else {
+                    resolve(base_bet = body);
+                }
 
             });
 
