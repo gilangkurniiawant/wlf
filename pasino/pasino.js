@@ -23,6 +23,8 @@ console.log(jum_sesi);
 (async() => {
     await get_token();
     await get_bet();
+    await get_largebet();
+
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
     }
@@ -90,7 +92,7 @@ async function bet(nomer, bet_amt, jumx) {
                         }
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        console.log(body);
+                        // console.log(body);
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
@@ -114,11 +116,11 @@ async function perhiutngan(nomer, bet, jumx) {
     var nextbet;
     if (bet.hasOwnProperty("profit")) {
         if (bet.profit > 0) {
-            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance);
+            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
             nextbet = base_bet;
 
         } else {
-            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance);
+            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
             nextbet = Math.abs(bet.profit) * 2;
         }
     } else if (bet.hasOwnProperty("message")) {
@@ -209,6 +211,7 @@ async function get_largebet() {
                     console.log("Gagal Mendapatkan Largebet : " + e);
                     get_largebet();
                 } else {
+                    console.log("Largebet : " + body);
                     resolve(lb = body);
                 }
 
