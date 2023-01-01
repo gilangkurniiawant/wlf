@@ -69,7 +69,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "payout": "2",
                     "winning_chance": "47.50",
                     "profit": bet_amt.toString(),
-                    "client_seed": Math.random().toString(36).slice(2)
+                    "client_seed": makeid(Math.floor(Math.random() * (32 - 10 + 1)) + 10)
 
                 }),
                 headers: headers
@@ -246,4 +246,14 @@ async function set_largebet(data) {
 
     });
 
+}
+
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
