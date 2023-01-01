@@ -27,6 +27,7 @@ console.log(jum_sesi);
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
+        await delay(1000);
     }
 
     while (1) {
@@ -64,7 +65,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "language": "en",
                     "bet_amt": bet_amt.toString(),
                     "coin": "TRX",
-                    "type": 2,
+                    "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
                     "payout": "2",
                     "winning_chance": "47.50",
                     "profit": bet_amt.toString(),
