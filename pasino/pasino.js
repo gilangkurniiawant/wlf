@@ -8,26 +8,37 @@ var headers = {
 
 
 var base_bet,
+    bet_besar = 0,
+    lb,
+    x = 0,
     jum_sesi = process.argv.slice(2);
 if (jum_sesi == "") {
-    console.log("Sesi Tidak Ditemiukan");
+    console.log("Jumlah Sesi Tidak Ditemiukan");
     process.exit();
 }
 console.log(jum_sesi);
 
 
-x = 0;
+
 (async() => {
     await get_token();
     await get_bet();
-
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
     }
+
     while (1) {
-        await delay(60 * 1000);
         await get_token();
         await get_bet();
+
+        await get_largebet();
+
+        if (bet_besar > lb) {
+            await set_largebet(bet_besar);
+        }
+
+        await delay(60 * 1000);
+
     }
 })();
 
@@ -66,7 +77,7 @@ async function bet(nomer, bet_amt, jumx) {
                         console.log("Gagal : " + e);
                     }
                     body = JSON.parse(body);
-                    if (body.hasOwnProperty("profit")) {
+                    if (body.hasOwnProperty("balance")) {
                         bet_amt_2 = await perhiutngan(nomer, body, jumx);
                         if (bet_amt == undefined) {
                             bet_amt = base_bet;
@@ -74,6 +85,9 @@ async function bet(nomer, bet_amt, jumx) {
                             bet_amt = bet_amt_2;
                         }
                         nomer++;
+                        if (bet_besar < bet_amt) {
+                            bet_besar = bet_amt;
+                        }
                         bet(nomer, bet_amt, jumx);
                     } else {
                         console.log(body);
@@ -114,6 +128,8 @@ async function perhiutngan(nomer, bet, jumx) {
 
             nextbet = cari[0];
             console.log(nextbet);
+        } else if (bet.message.includes("Your balance is not sufficient")) {
+            nextbet = base_bet;
         } else {
             console.log(bet)
         }
@@ -164,10 +180,62 @@ async function get_bet() {
             },
             function(e, r, body) {
                 if (e) {
-                    console.log("Gagal Mendapatkan Token : " + e);
+                    console.log("Gagal Mendapatkan Get Bet : " + e);
                     get_bet();
                 } else {
                     resolve(base_bet = body);
+                }
+
+            });
+
+    });
+
+}
+
+
+async function get_largebet() {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/pasino/lb.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Largebet : " + e);
+                    get_largebet();
+                } else {
+                    resolve(lb = body);
+                }
+
+            });
+
+    });
+
+}
+
+
+async function set_largebet(data) {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/pasino/index.php/?lb=" + data,
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Set Bet");
+                    set_largebet(data);
+                } else {
+                    resolve(1);
                 }
 
             });
