@@ -69,7 +69,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "payout": "2",
                     "winning_chance": "47.50",
                     "profit": bet_amt.toString(),
-                    "client_seed": makeid(Math.floor(Math.random() * (32 - 10 + 1)) + 10)
+                    "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
 
                 }),
                 headers: headers
