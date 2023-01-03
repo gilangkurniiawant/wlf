@@ -71,7 +71,7 @@ async function bet(nomer, bet_amt, jumx) {
                 "payout": "2",
                 "winning_chance": "47.50",
                 "profit": bet_amt.toString(),
-                "client_seed": makeid(Math.floor(Math.random() * (64 - 4 + 1)) + 4)
+                "client_seed": makeid(Math.floor(Math.random() * (32 - 10 + 1)) + 10)
 
             }),
             headers: headers
@@ -135,6 +135,8 @@ async function perhiutngan(nomer, bet, jumx) {
             console.log(nextbet);
         } else if (bet.message.includes("Your balance is not sufficient")) {
             nextbet = base_bet;
+        } else if (bet.message.includes("Seems like your session has expired.")) {
+            await get_token();
         } else {
             console.log(bet)
         }
@@ -185,10 +187,10 @@ async function get_bet() {
                 rejectUnauthorized: false
             }
         },
-            function (e, r, body) {
+            async function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Get Bet : " + e);
-                    get_bet();
+                    await get_bet();
                 } else {
                     resolve(base_bet = body);
                 }
