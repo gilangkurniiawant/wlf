@@ -20,14 +20,14 @@ console.log(jum_sesi);
 
 
 
-(async() => {
+(async () => {
     await get_token();
     await get_bet();
     await get_largebet();
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
-        await delay(1000);
+        await delay(500);
     }
 
     while (1) {
@@ -49,6 +49,7 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
+    await delay(Math.floor(Math.random() * (1000 - 100 + 1)) + 100)
     if (bet_amt == undefined) {
         bet_amt = base_bet;
     }
@@ -57,25 +58,25 @@ async function bet(nomer, bet_amt, jumx) {
 
 
         request.post({
-                url: 'https://api.pasino.io/dice/play',
-                agentOptions: {
-                    rejectUnauthorized: false
-                },
-                form: JSON.stringify({
-                    "token": token,
-                    "language": "en",
-                    "bet_amt": bet_amt.toString(),
-                    "coin": "TRX",
-                    "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
-                    "payout": "2",
-                    "winning_chance": "47.50",
-                    "profit": bet_amt.toString(),
-                    "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
-
-                }),
-                headers: headers
+            url: 'https://api.pasino.io/dice/play',
+            agentOptions: {
+                rejectUnauthorized: false
             },
-            async function(e, r, body) {
+            form: JSON.stringify({
+                "token": token,
+                "language": "en",
+                "bet_amt": bet_amt.toString(),
+                "coin": "TRX",
+                "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+                "payout": "2",
+                "winning_chance": "47.50",
+                "profit": bet_amt.toString(),
+                "client_seed": makeid(Math.floor(Math.random() * (4 - 10 + 1)) + 10)
+
+            }),
+            headers: headers
+        },
+            async function (e, r, body) {
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
@@ -94,7 +95,7 @@ async function bet(nomer, bet_amt, jumx) {
                         }
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        // console.log(body);
+                        console.log(body);
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
@@ -154,12 +155,12 @@ async function get_token() {
 
 
         request.get({
-                url: "https://akun.vip/pasino/token.txt",
-                agentOptions: {
-                    rejectUnauthorized: false
-                }
-            },
-            function(e, r, body) {
+            url: "https://akun.vip/pasino/token.txt",
+            agentOptions: {
+                rejectUnauthorized: false
+            }
+        },
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Token : " + e);
                 }
@@ -177,12 +178,12 @@ async function get_bet() {
 
 
         request.get({
-                url: "https://akun.vip/pasino/bet.txt",
-                agentOptions: {
-                    rejectUnauthorized: false
-                }
-            },
-            function(e, r, body) {
+            url: "https://akun.vip/pasino/bet.txt",
+            agentOptions: {
+                rejectUnauthorized: false
+            }
+        },
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Get Bet : " + e);
                     get_bet();
@@ -203,12 +204,12 @@ async function get_largebet() {
 
 
         request.get({
-                url: "https://akun.vip/pasino/lb.txt",
-                agentOptions: {
-                    rejectUnauthorized: false
-                }
-            },
-            function(e, r, body) {
+            url: "https://akun.vip/pasino/lb.txt",
+            agentOptions: {
+                rejectUnauthorized: false
+            }
+        },
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Largebet : " + e);
                     get_largebet();
@@ -230,12 +231,12 @@ async function set_largebet(data) {
 
 
         request.get({
-                url: "https://akun.vip/pasino/index.php/?lb=" + data,
-                agentOptions: {
-                    rejectUnauthorized: false
-                }
-            },
-            function(e, r, body) {
+            url: "https://akun.vip/pasino/index.php/?lb=" + data,
+            agentOptions: {
+                rejectUnauthorized: false
+            }
+        },
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Set Bet");
                     set_largebet(data);
