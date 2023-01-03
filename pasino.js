@@ -27,7 +27,7 @@ console.log(jum_sesi);
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
-        await delay(500);
+        await delay(1500);
     }
 
     while (1) {
@@ -49,7 +49,6 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
-    await delay(Math.floor(Math.random() * (1000 - 100 + 1)) + 100)
     if (bet_amt == undefined) {
         bet_amt = base_bet;
     }
@@ -71,7 +70,7 @@ async function bet(nomer, bet_amt, jumx) {
                 "payout": "2",
                 "winning_chance": "47.50",
                 "profit": bet_amt.toString(),
-                "client_seed": makeid(Math.floor(Math.random() * (4 - 10 + 1)) + 10)
+                "client_seed": makeid(Math.floor(Math.random() * (4 - 32 + 1)) + 32)
 
             }),
             headers: headers
