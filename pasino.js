@@ -38,6 +38,7 @@ console.log(jum_sesi);
 
         if (bet_besar > lb) {
             await set_largebet(bet_besar);
+            bet_besar = 0;
         }
 
         await delay(60 * 1000);
