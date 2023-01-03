@@ -8,6 +8,7 @@ var base_bet,
     bet_besar = 0,
     lb,
     x = 0,
+    ssocket,
     jum_sesi = process.argv.slice(2);
 
 if (jum_sesi == "") {
@@ -17,12 +18,9 @@ if (jum_sesi == "") {
 
 
 (async () => {
-    await get_token();
-    await get_bet();
-    await get_largebet();
-
-
     while (1) {
+        await delay(60 * 1000);
+
         await get_token();
         await get_bet();
 
@@ -33,19 +31,23 @@ if (jum_sesi == "") {
             bet_besar = 0;
         }
 
-        await delay(60 * 1000);
 
     }
 })();
 
-ws.on('open', function () {
+ws.on('open', async function () {
+    await get_token();
+    await get_bet();
+    await get_largebet();
+    await getsocket(token);
     ws.send(JSON.stringify({
         'method': 'initialization',
-        'socket_token': 'a4691e4389466d6728a5eda51a282d5919c3df0b8815bf96f243101f321aec09'
+        'socket_token': ssocket
     }));
 
 
 });
+
 ws.on('message', function (data, flags) {
 
     if (data.toString().includes("authenticated")) {
@@ -220,4 +222,32 @@ function makeid(length) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+}
+
+
+async function getsocket(token) {
+    await new Promise((resolve) => {
+
+
+        request.get({
+            url: "https://api.pasino.com/account/get-socket-token",
+            form: JSON.stringify({
+                'token': token
+            }),
+            agentOptions: {
+                rejectUnauthorized: false
+            }
+        },
+            async function (e, r, body) {
+                if (e) {
+                    console.log("Gagal Set Socket");
+                    await getsocket(data);
+                } else {
+                    let res = JSON.parse(body);
+                    resolve(ssocket = res.socket_token);
+                }
+
+            });
+
+    });
 }
