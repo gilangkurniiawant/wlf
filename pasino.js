@@ -80,23 +80,25 @@ async function bet(nomer, bet_amt, jumx) {
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
-                    }
-                    body = JSON.parse(body);
-                    if (body.hasOwnProperty("balance")) {
-                        bet_amt_2 = await perhiutngan(nomer, body, jumx);
-                        if (bet_amt == undefined) {
-                            bet_amt = base_bet;
-                        } else {
-                            bet_amt = bet_amt_2;
-                        }
-                        nomer++;
-                        if (bet_besar < bet_amt) {
-                            bet_besar = bet_amt;
-                        }
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        console.log(body);
-                        bet(nomer, bet_amt, jumx);
+                        body = JSON.parse(body);
+                        if (body.hasOwnProperty("balance")) {
+                            bet_amt_2 = await perhiutngan(nomer, body, jumx);
+                            if (bet_amt == undefined) {
+                                bet_amt = base_bet;
+                            } else {
+                                bet_amt = bet_amt_2;
+                            }
+                            nomer++;
+                            if (bet_besar < bet_amt) {
+                                bet_besar = bet_amt;
+                            }
+                            bet(nomer, bet_amt, jumx);
+                        } else {
+                            console.log(body);
+                            bet(nomer, bet_amt, jumx);
+                        }
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
