@@ -20,6 +20,7 @@ console.log(jum_sesi);
 
 
 
+
 (async () => {
     await get_token();
     await get_bet();
@@ -70,7 +71,7 @@ async function bet(nomer, bet_amt, jumx) {
                 "payout": "2",
                 "winning_chance": "47.50",
                 "profit": bet_amt.toString(),
-                "client_seed": makeid(Math.floor(Math.random() * (4 - 32 + 1)) + 32)
+                "client_seed": makeid(Math.floor(Math.random() * (64 - 4 + 1)) + 4)
 
             }),
             headers: headers
@@ -100,7 +101,7 @@ async function bet(nomer, bet_amt, jumx) {
                 } catch (e) {
                     console.log("Gagal : " + e);
                     await get_token();
-                    bet(0, bet_amt, jum);
+                    bet(0, bet_amt, jumx);
 
                 }
 
@@ -159,11 +160,13 @@ async function get_token() {
                 rejectUnauthorized: false
             }
         },
-            function (e, r, body) {
+            async function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Token : " + e);
+                    await get_token();
+                } else {
+                    resolve(token = body);
                 }
-                resolve(token = body);
 
             });
 
@@ -208,10 +211,10 @@ async function get_largebet() {
                 rejectUnauthorized: false
             }
         },
-            function (e, r, body) {
+            async function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Largebet : " + e);
-                    get_largebet();
+                    await get_largebet();
                 } else {
                     console.log("Largebet : " + body);
                     resolve(lb = body);
@@ -235,10 +238,10 @@ async function set_largebet(data) {
                 rejectUnauthorized: false
             }
         },
-            function (e, r, body) {
+            async function (e, r, body) {
                 if (e) {
                     console.log("Gagal Set Bet");
-                    set_largebet(data);
+                    await set_largebet(data);
                 } else {
                     resolve(1);
                 }
