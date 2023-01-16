@@ -28,7 +28,7 @@ console.log(jum_sesi);
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
-        await delay(1000);
+        await delay(50);
     }
 
     while (1) {
