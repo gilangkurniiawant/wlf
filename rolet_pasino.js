@@ -49,7 +49,11 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
-    await randomseed();
+    for (let index = 0; index < 10; index++) {
+        randomseed();
+
+    }
+
 
     if (bet_amt == undefined) {
         bet_amt = base_bet;
@@ -67,13 +71,9 @@ async function bet(nomer, bet_amt, jumx) {
                     "token": token,
                     "language": "en",
                     "bet_table": [{
-                        "type": "series",
-                        "series": "all-black",
-                        "bet_amt": "0.05120000"
-                    }, {
-                        "type": "series",
-                        "series": "all-red",
-                        "bet_amt": "0.05120000"
+                        "type": "number",
+                        "number": "0",
+                        "bet_amt": "0.00010000"
                     }],
                     "coin": "TRX",
                     "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
