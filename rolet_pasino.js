@@ -32,6 +32,11 @@ console.log(jum_sesi);
     }
 
     while (1) {
+        for (let index = 0; index <= 20; index++) {
+            randomseed();
+
+        }
+
         await get_token();
         await get_bet();
 
@@ -49,7 +54,6 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
-    randomseed();
 
 
     if (bet_amt == undefined) {
@@ -145,9 +149,10 @@ async function randomseed() {
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
-                    await get_token();
+                    randomseed();
 
                 }
+                randomseed();
 
 
 
