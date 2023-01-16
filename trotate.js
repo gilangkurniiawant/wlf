@@ -12,25 +12,44 @@ var base_bet,
     lb,
     x = 0,
     jum_sesi = process.argv.slice(2);
+if (jum_sesi == "") {
+    console.log("Jumlah Sesi Tidak Ditemiukan");
+    process.exit();
+}
+console.log(jum_sesi);
 
 
 
 (async() => {
 
     await get_token();
-    while (1) {
-        randomseed();
-        await delay(50);
+    await get_bet();
+    await get_largebet();
 
-
+    for (let jum = 0; jum < jum_sesi; jum++) {
+        bet(0, base_bet, jum);
+        await delay(1000);
     }
 
+    while (1) {
+        await get_token();
+        await get_bet();
+
+        await get_largebet();
+
+        if (bet_besar > lb) {
+            await set_largebet(bet_besar);
+        }
+
+        await delay(60 * 1000);
+
+    }
 })();
 
 
 
 async function bet(nomer, bet_amt, jumx) {
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index <= 3; index++) {
         randomseed();
 
     }
@@ -54,7 +73,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "bet_table": [{
                         "type": "number",
                         "number": "0",
-                        "bet_amt": "0.00010000"
+                        "bet_amt": "0.00050000"
                     }],
                     "coin": "TRX",
                     "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
@@ -123,7 +142,6 @@ async function randomseed() {
                     }
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("seed")) {
-                        console.log(body.seed);
 
                     } else {
                         console.log(body);
@@ -137,7 +155,7 @@ async function randomseed() {
 
 
             });
-
+        resolve(1);
 
 
     });
