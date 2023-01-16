@@ -18,9 +18,10 @@ var base_bet,
 (async() => {
 
     await get_token();
-
-    for (let index = 0; index < 100; index++) {
+    while (1) {
         randomseed();
+        await delay(50);
+
 
     }
 
@@ -122,6 +123,7 @@ async function randomseed() {
                     }
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("seed")) {
+                        console.log(body.seed);
 
                     } else {
                         console.log(body);
@@ -135,7 +137,7 @@ async function randomseed() {
 
 
             });
-        randomseed();
+
 
 
     });
