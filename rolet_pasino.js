@@ -49,10 +49,7 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
-    for (let index = 0; index <= 5; index++) {
-        randomseed();
-
-    }
+    randomseed();
 
 
     if (bet_amt == undefined) {
