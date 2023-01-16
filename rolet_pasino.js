@@ -68,8 +68,12 @@ async function bet(nomer, bet_amt, jumx) {
                     "language": "en",
                     "bet_table": [{
                         "type": "series",
+                        "series": "all-black",
+                        "bet_amt": "0.05120000"
+                    }, {
+                        "type": "series",
                         "series": "all-red",
-                        "bet_amt": bet_amt.toString()
+                        "bet_amt": "0.05120000"
                     }],
                     "coin": "TRX",
                     "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
