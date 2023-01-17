@@ -30,12 +30,12 @@ console.log(jum_sesi);
         bet(0, base_bet, jum);
         await delay(50);
     }
-
-    while (1) {
         for (let index = 0; index <= 30; index++) {
             randomseed();
 
         }
+
+    while (1) {
 
         await get_token();
         await get_bet();
