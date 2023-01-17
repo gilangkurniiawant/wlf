@@ -30,10 +30,7 @@ console.log(jum_sesi);
         bet(0, base_bet, jum);
         await delay(50);
     }
-        for (let index = 0; index <= 30; index++) {
-            randomseed();
 
-        }
 
     while (1) {
 
@@ -55,7 +52,7 @@ console.log(jum_sesi);
 
 async function bet(nomer, bet_amt, jumx) {
 
-
+    await randomseed();
     if (bet_amt == undefined) {
         bet_amt = base_bet;
     }
