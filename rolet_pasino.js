@@ -163,6 +163,7 @@ async function randomseed() {
 
     });
     await delay(1000);
+    randomseed();
 
 
 }
