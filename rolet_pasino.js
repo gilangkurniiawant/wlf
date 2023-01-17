@@ -146,10 +146,10 @@ async function randomseed() {
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
-                    randomseed(1);
+                    resolve(1);
 
                 }
-                randomseed(1);
+                resolve(1);
 
 
 
