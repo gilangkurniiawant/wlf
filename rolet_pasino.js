@@ -21,25 +21,16 @@ console.log(jum_sesi);
 
 
 (async() => {
-
-
     await get_token();
     await get_bet();
     await get_largebet();
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
-        await delay(50);
+        await delay(1000);
     }
 
-    for (let index = 0; index < 20; index++) {
-        randomseed();
-
-    }
-
-    await delay(3000);
     while (1) {
-
         await get_token();
         await get_bet();
 
@@ -57,8 +48,7 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
-
-
+    await randomseed();
     if (bet_amt == undefined) {
         bet_amt = base_bet;
     }
@@ -77,7 +67,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "bet_table": [{
                         "type": "number",
                         "number": "0",
-                        "bet_amt": "0.00050000"
+                        "bet_amt": "0.00010000"
                     }],
                     "coin": "TRX",
                     "client_seed": makeid(Math.floor(Math.random() * (10 - 10 + 1)) + 10)
@@ -104,7 +94,7 @@ async function bet(nomer, bet_amt, jumx) {
                         }
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        console.log(body);
+                        // console.log(body);
                         bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
@@ -124,61 +114,14 @@ async function bet(nomer, bet_amt, jumx) {
 }
 
 
-async function randomseed() {
-    await new Promise((resolve, reject) => {
-
-
-        request.post({
-                url: 'https://api.pasino.com/roulette/rotate-seed',
-                agentOptions: {
-                    rejectUnauthorized: false
-                },
-                form: JSON.stringify({
-                    "language": "id",
-                    "token": token
-                }),
-                headers: headers
-            },
-            async function(e, r, body) {
-                randomseed();
-
-                try {
-                    if (e) {
-                        console.log("Gagal : " + e);
-                    }
-                    body = JSON.parse(body);
-                    if (body.hasOwnProperty("seed")) {
-
-                    } else {
-                        console.log(body);
-                    }
-                } catch (e) {
-                    console.log("Gagal : " + e);
-
-
-                }
-
-
-
-            });
-
-
-    });
-
-
-}
-
-
-
 async function perhiutngan(nomer, bet, jumx) {
     var nextbet;
     if (bet.hasOwnProperty("profit")) {
         if (bet.profit > 0) {
-            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
+            console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb + " ->" + bet.bet_id);
             nextbet = base_bet;
-
         } else {
-            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
+            console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb + " ->" + bet.bet_id);
             nextbet = Math.abs(bet.profit) * 2;
         }
     } else if (bet.hasOwnProperty("message")) {
@@ -191,9 +134,11 @@ async function perhiutngan(nomer, bet, jumx) {
         } else if (bet.message.includes("Your balance is not sufficient")) {
             nextbet = base_bet;
         } else {
+            nextbet = Math.abs(bet.profit);
             console.log(bet)
         }
     } else {
+        nextbet = Math.abs(bet.profit);
         console.log(bet)
     }
 
@@ -313,4 +258,49 @@ function makeid(length) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+}
+
+async function randomseed() {
+    await new Promise((resolve, reject) => {
+
+
+        request.post({
+                url: 'https://api.pasino.com/roulette/rotate-seed',
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
+                form: JSON.stringify({
+                    "language": "id",
+                    "token": token
+                }),
+                headers: headers
+            },
+            async function(e, r, body) {
+
+                try {
+                    if (e) {
+                        console.log("Gagal : " + e);
+                    }
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("seed")) {
+
+                    } else {
+                        console.log(body);
+                    }
+                    resolve(1);
+                } catch (e) {
+                    console.log("Gagal : " + e);
+                    resolve(1);
+
+
+                }
+                resolve(1);
+
+
+            });
+
+
+    });
+
+
 }
