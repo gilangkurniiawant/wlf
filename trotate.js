@@ -27,16 +27,31 @@ console.log(jum_sesi);
     await get_bet();
     await get_largebet();
 
-    while (1) {
-
-        for (let index = 0; index < 30; index++) {
-            await delay(1000);
-            randomseed();
-
-        }
+    for (let jum = 0; jum < jum_sesi; jum++) {
+        bet(0, base_bet, jum);
+        await delay(50);
     }
 
+    for (let index = 0; index < 20; index++) {
+        randomseed();
 
+    }
+
+    await delay(3000);
+    while (1) {
+
+        await get_token();
+        await get_bet();
+
+        await get_largebet();
+
+        if (bet_besar > lb) {
+            await set_largebet(bet_besar);
+        }
+
+        await delay(60 * 1000);
+
+    }
 })();
 
 
@@ -125,6 +140,8 @@ async function randomseed() {
                 headers: headers
             },
             async function(e, r, body) {
+                randomseed();
+
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
@@ -147,8 +164,6 @@ async function randomseed() {
 
 
     });
-    await delay(1000);
-    randomseed();
 
 
 }
