@@ -31,7 +31,7 @@ console.log(jum_sesi);
         await delay(50);
     }
 
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 30; index++) {
         randomseed();
 
     }
@@ -151,10 +151,10 @@ async function randomseed() {
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
-                    randomseed(1);
+                    randomseed();
 
                 }
-                randomseed(1);
+                randomseed();
 
 
 
