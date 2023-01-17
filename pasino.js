@@ -66,11 +66,11 @@ async function bet(nomer, bet_amt, jumx) {
                     "language": "en",
                     "bet_amt": bet_amt.toString(),
                     "coin": "TRX",
-                    "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+                    "type": 1, //Math.floor(Math.random() * (2 - 1 + 1)) + 1,
                     "payout": "2",
                     "winning_chance": "47.50",
                     "profit": bet_amt.toString(),
-                    "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
+                    "client_seed": 'yfunULfuxiMMEfZ3hk1nafo8RCeWVWCmNWhbMRK550rageN9Z2Glvr7irKobloLe' //makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
 
                 }),
                 headers: headers
