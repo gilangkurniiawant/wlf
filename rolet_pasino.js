@@ -21,6 +21,7 @@ console.log(jum_sesi);
 
 
 (async() => {
+    await delay(30);
 
     await get_token();
     await get_bet();
@@ -49,6 +50,7 @@ console.log(jum_sesi);
         }
 
         await delay(60 * 1000);
+        process.exit();
 
     }
 })();
@@ -76,7 +78,7 @@ async function bet(nomer, bet_amt, jumx) {
                     "bet_table": [{
                         "type": "number",
                         "number": "0",
-                        "bet_amt": "0.00010000"
+                        "bet_amt": "0.00050000"
                     }],
                     "coin": "TRX",
                     "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
