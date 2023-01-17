@@ -70,7 +70,7 @@ async function bet(nomer, bet_amt, jumx) {
                         "bet_amt": "0.00010000"
                     }],
                     "coin": "TRX",
-                    "client_seed": makeid(Math.floor(Math.random() * (10 - 10 + 1)) + 10)
+                    "client_seed": "ry4Tzuuy1y" //makeid(Math.floor(Math.random() * (10 - 10 + 1)) + 10)
 
                 }),
                 headers: headers
