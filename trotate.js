@@ -20,36 +20,15 @@ console.log(jum_sesi);
 
 
 
-(async() => {
+(async () => {
 
 
     await get_token();
     await get_bet();
     await get_largebet();
 
-    for (let jum = 0; jum < jum_sesi; jum++) {
-        bet(0, base_bet, jum);
-        await delay(50);
-    }
-
     for (let index = 0; index < 20; index++) {
         randomseed();
-
-    }
-
-    await delay(3000);
-    while (1) {
-
-        await get_token();
-        await get_bet();
-
-        await get_largebet();
-
-        if (bet_besar > lb) {
-            await set_largebet(bet_besar);
-        }
-
-        await delay(60 * 1000);
 
     }
 })();
@@ -85,7 +64,7 @@ async function bet(nomer, bet_amt, jumx) {
                 }),
                 headers: headers
             },
-            async function(e, r, body) {
+            async function (e, r, body) {
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
@@ -139,7 +118,7 @@ async function randomseed() {
                 }),
                 headers: headers
             },
-            async function(e, r, body) {
+            async function (e, r, body) {
                 randomseed();
 
                 try {
@@ -215,7 +194,7 @@ async function get_token() {
                     rejectUnauthorized: false
                 }
             },
-            function(e, r, body) {
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Token : " + e);
                 }
@@ -238,7 +217,7 @@ async function get_bet() {
                     rejectUnauthorized: false
                 }
             },
-            function(e, r, body) {
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Get Bet : " + e);
                     get_bet();
@@ -264,7 +243,7 @@ async function get_largebet() {
                     rejectUnauthorized: false
                 }
             },
-            function(e, r, body) {
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Largebet : " + e);
                     get_largebet();
@@ -291,7 +270,7 @@ async function set_largebet(data) {
                     rejectUnauthorized: false
                 }
             },
-            function(e, r, body) {
+            function (e, r, body) {
                 if (e) {
                     console.log("Gagal Set Bet");
                     set_largebet(data);
