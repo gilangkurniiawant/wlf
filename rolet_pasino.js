@@ -146,15 +146,14 @@ async function randomseed() {
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
-                    randomseed();
+                    randomseed(1);
 
                 }
-                randomseed();
+                randomseed(1);
 
 
 
             });
-        resolve(1);
 
 
     });
