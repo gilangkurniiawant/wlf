@@ -120,7 +120,6 @@ async function perhiutngan(nomer, bet, jumx) {
         if (bet.profit > 0) {
             console.log(jumx + "|Win " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
             nextbet = base_bet;
-
         } else {
             console.log(jumx + "|Lose " + nomer + " " + bet.profit + " | " + bet.balance + " # " + bet_besar + " & " + lb);
             nextbet = Math.abs(bet.profit) * 2;
@@ -135,9 +134,11 @@ async function perhiutngan(nomer, bet, jumx) {
         } else if (bet.message.includes("Your balance is not sufficient")) {
             nextbet = base_bet;
         } else {
+            nextbet = Math.abs(bet.profit);
             console.log(bet)
         }
     } else {
+        nextbet = Math.abs(bet.profit);
         console.log(bet)
     }
 
