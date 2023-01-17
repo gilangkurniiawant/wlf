@@ -20,15 +20,14 @@ console.log(jum_sesi);
 
 
 
-
-(async () => {
+(async() => {
     await get_token();
     await get_bet();
     await get_largebet();
 
     for (let jum = 0; jum < jum_sesi; jum++) {
         bet(0, base_bet, jum);
-        await delay(1500);
+        await delay(1000);
     }
 
     while (1) {
@@ -39,7 +38,6 @@ console.log(jum_sesi);
 
         if (bet_besar > lb) {
             await set_largebet(bet_besar);
-            bet_besar = 0;
         }
 
         await delay(60 * 1000);
@@ -50,6 +48,7 @@ console.log(jum_sesi);
 
 
 async function bet(nomer, bet_amt, jumx) {
+    await randomseed();
     if (bet_amt == undefined) {
         bet_amt = base_bet;
     }
@@ -58,52 +57,50 @@ async function bet(nomer, bet_amt, jumx) {
 
 
         request.post({
-            url: 'https://api.pasino.io/dice/play',
-            agentOptions: {
-                rejectUnauthorized: false
-            },
-            form: JSON.stringify({
-                "token": token,
-                "language": "en",
-                "bet_amt": bet_amt.toString(),
-                "coin": "TRX",
-                "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
-                "payout": "2",
-                "winning_chance": "47.50",
-                "profit": bet_amt.toString(),
-                "client_seed": makeid(Math.floor(Math.random() * (32 - 10 + 1)) + 10)
+                url: 'https://api.pasino.io/dice/play',
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
+                form: JSON.stringify({
+                    "token": token,
+                    "language": "en",
+                    "bet_amt": bet_amt.toString(),
+                    "coin": "TRX",
+                    "type": Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+                    "payout": "2",
+                    "winning_chance": "47.50",
+                    "profit": bet_amt.toString(),
+                    "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
 
-            }),
-            headers: headers
-        },
-            async function (e, r, body) {
+                }),
+                headers: headers
+            },
+            async function(e, r, body) {
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
+                    }
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("balance")) {
+                        bet_amt_2 = await perhiutngan(nomer, body, jumx);
+                        if (bet_amt == undefined) {
+                            bet_amt = base_bet;
+                        } else {
+                            bet_amt = bet_amt_2;
+                        }
+                        nomer++;
+                        if (bet_besar < bet_amt) {
+                            bet_besar = bet_amt;
+                        }
                         bet(nomer, bet_amt, jumx);
                     } else {
-                        body = JSON.parse(body);
-                        if (body.hasOwnProperty("balance")) {
-                            bet_amt_2 = await perhiutngan(nomer, body, jumx);
-                            if (bet_amt == undefined) {
-                                bet_amt = base_bet;
-                            } else {
-                                bet_amt = bet_amt_2;
-                            }
-                            nomer++;
-                            if (bet_besar < bet_amt) {
-                                bet_besar = bet_amt;
-                            }
-                            bet(nomer, bet_amt, jumx);
-                        } else {
-                            console.log(body);
-                            bet(nomer, bet_amt, jumx);
-                        }
+                        // console.log(body);
+                        bet(nomer, bet_amt, jumx);
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
                     await get_token();
-                    bet(0, bet_amt, jumx);
+                    bet(0, bet_amt, jum);
 
                 }
 
@@ -137,8 +134,6 @@ async function perhiutngan(nomer, bet, jumx) {
             console.log(nextbet);
         } else if (bet.message.includes("Your balance is not sufficient")) {
             nextbet = base_bet;
-        } else if (bet.message.includes("Seems like your session has expired.")) {
-            await get_token();
         } else {
             console.log(bet)
         }
@@ -159,18 +154,16 @@ async function get_token() {
 
 
         request.get({
-            url: "https://akun.vip/pasino/token.txt",
-            agentOptions: {
-                rejectUnauthorized: false
-            }
-        },
-            async function (e, r, body) {
+                url: "https://akun.vip/pasino/token.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Token : " + e);
-                    await get_token();
-                } else {
-                    resolve(token = body);
                 }
+                resolve(token = body);
 
             });
 
@@ -184,15 +177,15 @@ async function get_bet() {
 
 
         request.get({
-            url: "https://akun.vip/pasino/bet.txt",
-            agentOptions: {
-                rejectUnauthorized: false
-            }
-        },
-            async function (e, r, body) {
+                url: "https://akun.vip/pasino/bet.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Get Bet : " + e);
-                    await get_bet();
+                    get_bet();
                 } else {
                     resolve(base_bet = body);
                 }
@@ -210,15 +203,15 @@ async function get_largebet() {
 
 
         request.get({
-            url: "https://akun.vip/pasino/lb.txt",
-            agentOptions: {
-                rejectUnauthorized: false
-            }
-        },
-            async function (e, r, body) {
+                url: "https://akun.vip/pasino/lb.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
                 if (e) {
                     console.log("Gagal Mendapatkan Largebet : " + e);
-                    await get_largebet();
+                    get_largebet();
                 } else {
                     console.log("Largebet : " + body);
                     resolve(lb = body);
@@ -237,15 +230,15 @@ async function set_largebet(data) {
 
 
         request.get({
-            url: "https://akun.vip/pasino/index.php/?lb=" + data,
-            agentOptions: {
-                rejectUnauthorized: false
-            }
-        },
-            async function (e, r, body) {
+                url: "https://akun.vip/pasino/index.php/?lb=" + data,
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
                 if (e) {
                     console.log("Gagal Set Bet");
-                    await set_largebet(data);
+                    set_largebet(data);
                 } else {
                     resolve(1);
                 }
@@ -264,4 +257,49 @@ function makeid(length) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+}
+
+async function randomseed() {
+    await new Promise((resolve, reject) => {
+
+
+        request.post({
+                url: 'https://api.pasino.com/dice/rotate-seed',
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
+                form: JSON.stringify({
+                    "language": "id",
+                    "token": token
+                }),
+                headers: headers
+            },
+            async function(e, r, body) {
+
+                try {
+                    if (e) {
+                        console.log("Gagal : " + e);
+                    }
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("seed")) {
+
+                    } else {
+                        console.log(body);
+                    }
+                    resolve(1);
+                } catch (e) {
+                    console.log("Gagal : " + e);
+                    resolve(1);
+
+
+                }
+                resolve(1);
+
+
+            });
+
+
+    });
+
+
 }
