@@ -21,7 +21,7 @@ console.log(jum_sesi);
 
 
 (async() => {
-    await delay(30);
+
 
     await get_token();
     await get_bet();
@@ -32,12 +32,12 @@ console.log(jum_sesi);
         await delay(50);
     }
 
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 30; index++) {
         randomseed();
 
     }
 
-
+    await delay(3000);
     while (1) {
 
         await get_token();
@@ -50,7 +50,6 @@ console.log(jum_sesi);
         }
 
         await delay(60 * 1000);
-        process.exit();
 
     }
 })();
