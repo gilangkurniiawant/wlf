@@ -32,7 +32,7 @@ console.log(jum_sesi);
         await delay(50);
     }
 
-    for (let index = 0; index < 5; index++) {
+    for (let index = 0; index < 25; index++) {
         randomseed();
 
     }
