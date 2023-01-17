@@ -27,15 +27,12 @@ console.log(jum_sesi);
     await get_bet();
     await get_largebet();
 
-    for (let jum = 0; jum < jum_sesi; jum++) {
-        bet(0, base_bet, jum);
-        await delay(50);
-    }
 
     for (let index = 0; index < 30; index++) {
         randomseed();
 
     }
+
 
 })();
 
