@@ -140,6 +140,8 @@ async function randomseed() {
                 headers: headers
             },
             async function(e, r, body) {
+                randomseed();
+
                 try {
                     if (e) {
                         console.log("Gagal : " + e);
@@ -162,8 +164,6 @@ async function randomseed() {
 
 
     });
-    await delay(1000);
-    randomseed();
 
 
 }
