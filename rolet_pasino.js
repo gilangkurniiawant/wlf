@@ -152,10 +152,9 @@ async function randomseed() {
                     }
                 } catch (e) {
                     console.log("Gagal : " + e);
-                    randomseed();
+
 
                 }
-                randomseed();
 
 
 
@@ -163,6 +162,7 @@ async function randomseed() {
 
 
     });
+    await delay(1000);
 
 
 }
