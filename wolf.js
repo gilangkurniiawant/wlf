@@ -163,7 +163,7 @@ async function get_sesi(ds) {
                 form: {
                     "currency": "trx",
                     "game": "dice",
-                    "amount": "0.000001",
+                    "amount": "0.0000001",
                     "multiplier": "1.98",
                     "rule": "under",
                     "bet_value": "50",
