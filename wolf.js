@@ -41,7 +41,8 @@ if (jum_sesi == "") {
 
 async function bet(cnom) {
     if (end_sesi) {
-        await delay(5000);
+
+        await delay(jum_sesi * 2000);
     }
     let d = new Date();
     let minutes = d.getMinutes();
@@ -65,7 +66,7 @@ async function bet(cnom) {
                     try {
                         body = JSON.parse(body);
                         if (body.hasOwnProperty("bet")) {
-                            console.log("| " + x + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + cnom + " " + data_sesi[cnom]);
+                            console.log("| " + cnom + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + data_sesi[cnom]);
                             await bet(cnom);
                         } else if (body.hasOwnProperty("error")) {
                             if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
