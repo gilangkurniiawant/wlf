@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.000001,
+    base_bet = 0.0000001,
     r_seed = false,
     lb;
 x = 0;
@@ -88,9 +88,10 @@ async function bet(cnom) {
     minutes = d.getMinutes();
     if (minutes == 59) {
         if (!r_seed) {
+            await delay(10 * 1000);
             await rotate_seed();
             console.log("Delay 1 menit");
-            await delay(60 * 1000);
+            await delay(5 * 1000);
         }
     } else if (minutes == 45) {
         r_seed = false;
