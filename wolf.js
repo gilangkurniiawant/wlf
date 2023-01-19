@@ -156,7 +156,7 @@ async function bet(cnom) {
                             resolve(1);
                         }
                     } catch (e) {
-                        console.log("Gagal " + cnom + " : " + e);
+                        console.log("Gagal " + cnom + " : " + JSON.stringify(body));
                         bet(cnom);
                         resolve(1);
                     }
