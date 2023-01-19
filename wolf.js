@@ -8,6 +8,7 @@ var headers = {
     'authorization': 'Bearer ',
     'x-requested-with': 'XMLHttpRequest'
 };
+var fs = require('fs');
 
 
 jum_sesi = process.argv.slice(2),
@@ -18,16 +19,28 @@ if (jum_sesi == "") {
     process.exit();
 }
 
+var all_exc = 0;
+var all_sesi = fs.readFileSync('./modul/wolf.json');
+try {
+    var data_sesi = JSON.parse(all_sesi);
+} catch (error) {
+    var data_sesi = [];
+}
+
+
+
 (async() => {
     await get_token();
 
     try {
 
-        for (let cs = 0; cs < jum_sesi; cs++) {
-            data_sesi[cs] = "sesi";
+        for (let cs = 0; cs <= jum_sesi; cs++) {
+            if (data_sesi[cs] == undefined) {
+                data_sesi[cs] = "sesi";
+            }
         }
 
-        for (let i = 0; i < data_sesi.length; i++) {
+        for (let i = 0; i <= jum_sesi; i++) {
             bet(i);
 
         }
@@ -44,12 +57,6 @@ async function bet(cnom) {
     }
     let d = new Date();
     let minutes = d.getMinutes();
-    /*
-    if (minutes == 30 || minutes == 30 || minutes == 59) {
-        console.log("Delay 1 menit");
-        await delay(90000);
-    }
-    */
 
     await new Promise((resolve) => {
 
@@ -59,33 +66,40 @@ async function bet(cnom) {
                     form: {
                         uuid: data_sesi[cnom]
                     },
-                    headers: headers
+                    headers: headers,
+                    timeout: 5000
                 },
                 async function(e, r, body) {
-
+                    all_exc++;
+                    if (all_exc > 100000) {
+                        process.exit();
+                    }
                     try {
                         body = JSON.parse(body);
                         if (body.hasOwnProperty("bet")) {
                             console.log("| " + cnom + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + data_sesi[cnom]);
-                            await bet(cnom);
+                            bet(cnom);
                         } else if (body.hasOwnProperty("error")) {
                             if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
                                 console.log("Sesi Berakhir");
                                 await get_sesi(cnom);
-                                await bet(cnom);
-                                resolve(0);
+                                bet(cnom);
+                                resolve(1);
                             } else {
-                                console.log("Gagal : " + JSON.stringify(body));
-                                resolve(0);
+                                console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                                bet(cnom);
+                                resolve(1);
                             }
 
                         } else {
-                            console.log("Gagal : " + JSON.stringify(body));
-                            resolve(0);
+                            console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                            bet(cnom);
+                            resolve(1);
                         }
                     } catch (e) {
-                        console.log("Gagal : " + e);
-                        resolve(0);
+                        console.log("Gagal " + cnom + " : " + e);
+                        bet(cnom);
+                        resolve(1);
                     }
 
                 });
@@ -98,11 +112,13 @@ async function bet(cnom) {
 process.on("SIGINT", async() => {
     end_sesi = true;
     console.log(" [+] Menutup program");
+    /*
     for (let i = 0; i < data_sesi.length; i++) {
         console.log("|" + i + " Menutup sesi " + data_sesi[i]);
         await stop_sesi(data_sesi[i]);
 
     }
+    */
     process.exit(0);
 })
 
@@ -141,29 +157,31 @@ async function get_sesi(ds) {
                         }]
                     }]
                 },
-                headers: headers
+                headers: headers,
+                timeout: 5000
             },
             async function(e, r, body) {
                 try {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("autoBet")) {
                         data_sesi[ds] = body.autoBet.uuid;
+                        fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
                         resolve(1);
                     } else if (body.hasOwnProperty("error")) {
                         if (body.error == "Too Many Attempts.") {
                             console.log("Terlalu Banyak Sesi " + ds);
                             await delay(60000);
-                            resolve(0);
+                            resolve(1);
 
                         }
-                        resolve(0);
+                        resolve(1);
                     } else {
                         console.log("Gagal Mendapatkan Sesi Pharse : " + JSON.stringify(body));
-                        resolve(0);
+                        resolve(1);
                     }
                 } catch (e) {
                     console.log("Gagal Mendapatkan Sesi Body : " + e);
-                    resolve(0);
+                    resolve(1);
                 }
 
             });
@@ -182,7 +200,8 @@ async function stop_sesi(ds) {
                 form: {
                     "uuid": ds
                 },
-                headers: headers
+                headers: headers,
+                timeout: 5000
             },
             function(e, r, body) {
                 if (body == "") {
