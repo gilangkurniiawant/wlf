@@ -11,9 +11,14 @@ var headers = {
 
 
 
-jum_sesi = 2,
+jum_sesi = jum_sesi = process.argv.slice(2),
     end_sesi = false;
 x = 0;
+if (jum_sesi == "") {
+    console.log("Jumlah Sesi Tidak Ditemiukan");
+    process.exit();
+}
+
 (async() => {
     await get_token();
 
