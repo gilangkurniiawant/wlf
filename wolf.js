@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.0000001,
+    base_bet = 0.000001,
     r_seed = false,
     lb;
 x = 0;
@@ -124,7 +124,6 @@ async function bet(cnom) {
                             if (bet_besar < body.bet.amount) {
                                 bet_besar = body.bet.amount;
                             }
-
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             if (body.bet.amount > (base_bet * 900000)) {
                                 await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet");
