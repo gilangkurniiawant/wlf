@@ -125,14 +125,15 @@ async function bet(cnom) {
                                 bet_besar = body.bet.amount;
                             }
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
-                            if (body.bet.amount > (base_bet * 100000)) {
-                                await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet");
-
+                            if (body.bet.amount > (base_bet * 20000)) {
+                                if (body.bet.amount > (base_bet * 100000)) {
+                                    await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                                }
                                 if (body.bet.state !== "loss") {
                                     await stop_sesi(cnom);
                                     await get_sesi(cnom);
                                 }
-                                await delay(5000);
+                                await delay(1500);
                             }
                             bet(cnom);
                             resolve(1);
