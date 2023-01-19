@@ -157,6 +157,7 @@ async function bet(cnom) {
                         }
                     } catch (e) {
                         console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                        await delay(5000);
                         bet(cnom);
                         resolve(1);
                     }
