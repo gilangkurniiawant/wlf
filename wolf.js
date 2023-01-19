@@ -15,6 +15,8 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
+    base_bet = 0.0000001,
+    r_seed = false,
     lb;
 x = 0;
 if (jum_sesi == "") {
@@ -24,6 +26,7 @@ if (jum_sesi == "") {
 
 
 var all_exc = 0;
+
 var all_sesi = fs.readFileSync('./modul/wolf.json');
 try {
     var data_sesi = JSON.parse(all_sesi);
@@ -31,7 +34,10 @@ try {
     var data_sesi = [];
 }
 
+
+
 (async() => {
+
     await get_token();
     await get_largebet();
     if (op_cmd == "stop") {
@@ -78,12 +84,22 @@ try {
 })();
 
 async function bet(cnom) {
+    d = new Date();
+    minutes = d.getMinutes();
+    if (minutes == 59) {
+        if (!r_seed) {
+            await rotate_seed();
+            console.log("Delay 1 menit");
+            await delay(60 * 1000);
+        }
+    } else if (minutes == 45) {
+        r_seed = false;
+
+    }
     if (end_sesi) {
 
         await delay(jum_sesi * 2000);
     }
-    let d = new Date();
-    let minutes = d.getMinutes();
 
     await new Promise((resolve) => {
 
@@ -107,17 +123,28 @@ async function bet(cnom) {
                             if (bet_besar < body.bet.amount) {
                                 bet_besar = body.bet.amount;
                             }
+
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
+                            if (body.bet.amount > (base_bet * 900000)) {
+                                await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet");
+
+                                if (body.bet.state !== "loss") {
+                                    await stop_sesi(cnom);
+                                    await get_sesi(cnom);
+                                }
+                                await delay(5000);
+                            }
                             bet(cnom);
                             resolve(1);
                         } else if (body.hasOwnProperty("error")) {
-                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
+                            if (body.error.message == "Auto-bet has ended or not exists.") {
                                 console.log("Sesi Berakhir");
                                 await get_sesi(cnom);
                                 bet(cnom);
                                 resolve(1);
                             } else {
                                 console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                                tele("Gagal " + cnom + " : " + JSON.stringify(body));
                                 bet(cnom);
                                 resolve(1);
                             }
@@ -163,7 +190,7 @@ async function get_sesi(ds) {
                 form: {
                     "currency": "trx",
                     "game": "dice",
-                    "amount": "0.0000001",
+                    "amount": base_bet.toString(),
                     "multiplier": "1.98",
                     "rule": "under",
                     "bet_value": "50",
@@ -246,9 +273,45 @@ async function stop_sesi(ds) {
                     console.log("Gagal Stop Sesi : " + e);
                     resolve(1);
                 }
-                data_sesi[ds] = "sesi";
+                data_sesi[ds] = "290724bb-4a4f-4e2f-b5ce-2f8727f4639b";
                 fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
                 resolve(1);
+
+            });
+
+    });
+
+}
+
+async function rotate_seed() {
+
+    await new Promise((resolve) => {
+
+        request.get({
+                url: "https://wolf.bet/api/v1/game/seed/refresh",
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
+                headers: headers,
+                timeout: 10000
+            },
+            function(e, r, body) {
+                try {
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("server_seed_hashed")) {
+                        console.log("Berhasil Rotate Seed " + ds);
+                        r_seed = true;
+                        resolve(1);
+
+                    } else {
+                        console.log("Gagal Rotate Seed : " + JSON.stringify(body));
+                        resolve(1);
+                    }
+                } catch (e) {
+                    console.log("Gagal Rotate Seed : " + body);
+                    resolve(1);
+
+                }
 
             });
 
@@ -308,7 +371,6 @@ async function get_largebet() {
     });
 
 }
-
 async function set_largebet(data) {
 
     await new Promise((resolve) => {
@@ -316,6 +378,31 @@ async function set_largebet(data) {
 
         request.get({
                 url: "https://akun.vip/wolf/index.php/?lb=" + data,
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Set Bet");
+                    set_largebet(data);
+                } else {
+                    resolve(1);
+                }
+
+            });
+
+    });
+
+}
+
+async function tele(data) {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://api.telegram.org/bot1356149887:AAFOD2v7emP9b1AcfhdEQXuRz3hjddvW624/sendMessage?chat_id=@caridolarcair&text=" + encodeURIComponent(data) + "&parse_mode=HTML&disable_web_page_preview=1",
                 agentOptions: {
                     rejectUnauthorized: false
                 }
