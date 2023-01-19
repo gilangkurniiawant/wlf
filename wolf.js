@@ -51,7 +51,6 @@ async function bet(cnom) {
 
     await new Promise((resolve) => {
 
-
         if (sesi == 1) {
             request.post({
                     url: 'https://wolf.bet/api/v2/dice/auto/play/',
@@ -61,6 +60,13 @@ async function bet(cnom) {
                     headers: headers
                 },
                 async function(e, r, body) {
+
+                    if (data_sesi[cnom] == "") {
+                        console.log("Mendapatkan Sesi " + cnom);
+                        await get_sesi(cnom);
+                    }
+
+
                     try {
                         body = JSON.parse(body);
                         if (body.hasOwnProperty("bet")) {
