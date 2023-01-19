@@ -11,8 +11,10 @@ var headers = {
 var fs = require('fs');
 
 
-jum_sesi = process.argv.slice(2),
-    end_sesi = false;
+var jum_sesi = process.argv.slice(2),
+    end_sesi = false,
+    bet_besar = 0,
+    lb;
 x = 0;
 if (jum_sesi == "") {
     console.log("Jumlah Sesi Tidak Ditemiukan");
@@ -31,6 +33,7 @@ try {
 
 (async() => {
     await get_token();
+    await get_largebet();
 
     try {
 
@@ -48,6 +51,20 @@ try {
     } catch (e) {
         console.log("Error : " + e);
     }
+
+    while (1) {
+        await get_token();
+        await get_largebet();
+
+        if (bet_besar > lb) {
+            await set_largebet(bet_besar);
+        }
+
+        await delay(60 * 1000);
+
+    }
+
+
 })();
 
 async function bet(cnom) {
@@ -77,7 +94,10 @@ async function bet(cnom) {
                     try {
                         body = JSON.parse(body);
                         if (body.hasOwnProperty("bet")) {
-                            console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + data_sesi[cnom]);
+                            if (bet_besar < body.bet.amount) {
+                                bet_besar = body.bet.amount;
+                            }
+                            console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             bet(cnom);
                         } else if (body.hasOwnProperty("error")) {
                             if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
@@ -241,6 +261,58 @@ async function get_token() {
                     'authorization': 'Bearer ' + body,
                     'x-requested-with': 'XMLHttpRequest'
                 });
+
+            });
+
+    });
+
+}
+
+
+async function get_largebet() {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/wolf/lb.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Largebet : " + e);
+                    get_largebet();
+                } else {
+                    console.log("Largebet : " + body);
+                    resolve(lb = body);
+                }
+
+            });
+
+    });
+
+}
+
+async function set_largebet(data) {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/wolf/index.php/?lb=" + data,
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Set Bet");
+                    set_largebet(data);
+                } else {
+                    resolve(1);
+                }
 
             });
 
