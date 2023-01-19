@@ -77,7 +77,7 @@ async function bet(cnom) {
                     try {
                         body = JSON.parse(body);
                         if (body.hasOwnProperty("bet")) {
-                            console.log("| " + cnom + "# " + all_exc + " " + +body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + data_sesi[cnom]);
+                            console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + " #" + data_sesi[cnom]);
                             bet(cnom);
                         } else if (body.hasOwnProperty("error")) {
                             if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
