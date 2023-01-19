@@ -39,9 +39,10 @@ try {
         for (let i = 0; i < jum_sesi; i++) {
             console.log("|" + i + " Menutup sesi " + data_sesi[i]);
             await stop_sesi(data_sesi[i]);
-            jum_sesi = 0;
-            process.exit();
+
         }
+        jum_sesi = 0;
+        process.exit();
 
     }
 
