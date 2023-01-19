@@ -37,7 +37,7 @@ try {
     if (op_cmd == "stop") {
         for (let i = 0; i < jum_sesi; i++) {
             console.log("|" + i + " Menutup sesi " + data_sesi[i]);
-            await stop_sesi(data_sesi[i]);
+            await stop_sesi(i);
 
         }
         jum_sesi = 0;
@@ -229,7 +229,7 @@ async function stop_sesi(ds) {
         request.post({
                 url: "https://wolf.bet/api/v2/dice/auto/stop",
                 form: {
-                    "uuid": ds
+                    "uuid": data_sesi[ds]
                 },
                 headers: headers,
                 timeout: 5000
@@ -246,6 +246,9 @@ async function stop_sesi(ds) {
                     console.log("Gagal Stop Sesi : " + e);
                     resolve(1);
                 }
+                data_sesi[ds] = "sesi";
+                fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
+                resolve(1);
 
             });
 
