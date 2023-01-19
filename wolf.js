@@ -115,7 +115,7 @@ async function bet(cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 10000) {
+                    if (all_exc > 1000) {
                         process.exit();
                     }
                     try {
