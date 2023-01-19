@@ -192,9 +192,9 @@ async function get_sesi(ds) {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "1.98",
+                    "multiplier": "2",
                     "rule": "under",
-                    "bet_value": "50",
+                    "bet_value": "49.5",
                     "config": [{
                         "command": [{
                             "name": "resetAmount"
