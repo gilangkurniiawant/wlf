@@ -44,10 +44,12 @@ async function bet(cnom) {
     }
     let d = new Date();
     let minutes = d.getMinutes();
+    /*
     if (minutes == 30 || minutes == 30 || minutes == 59) {
         console.log("Delay 1 menit");
         await delay(90000);
     }
+    */
 
     await new Promise((resolve) => {
 
