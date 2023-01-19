@@ -24,7 +24,7 @@ if (jum_sesi == "") {
     try {
 
         for (let cs = 0; cs < jum_sesi; cs++) {
-            data_sesi[cs] = "";
+            data_sesi[cs] = "sesi";
         }
 
         for (let i = 0; i < data_sesi.length; i++) {
@@ -60,13 +60,6 @@ async function bet(cnom) {
                     headers: headers
                 },
                 async function(e, r, body) {
-
-                    if (data_sesi[cnom] == "") {
-                        console.log("Mendapatkan Sesi " + cnom);
-                        await get_sesi(cnom);
-                        await delay(10000);
-                    }
-
 
                     try {
                         body = JSON.parse(body);
