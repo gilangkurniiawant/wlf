@@ -154,14 +154,14 @@ async function get_sesi(ds) {
                             resolve(0);
 
                         }
-                        get_sesi(ds);
+                        resolve(0);
                     } else {
                         console.log("Gagal Mendapatkan Sesi Pharse : " + JSON.stringify(body));
-                        get_sesi(ds);
+                        resolve(0);
                     }
                 } catch (e) {
                     console.log("Gagal Mendapatkan Sesi Body : " + e);
-                    get_sesi(ds);
+                    resolve(0);
                 }
 
             });
