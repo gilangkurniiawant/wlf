@@ -11,7 +11,8 @@ var headers = {
 var fs = require('fs');
 
 
-var jum_sesi = process.argv.slice(2),
+var jum_sesi = process.argv.slice(2)[0],
+    op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
     lb;
@@ -21,6 +22,7 @@ if (jum_sesi == "") {
     process.exit();
 }
 
+
 var all_exc = 0;
 var all_sesi = fs.readFileSync('./modul/wolf.json');
 try {
@@ -29,11 +31,17 @@ try {
     var data_sesi = [];
 }
 
-
-
 (async() => {
     await get_token();
     await get_largebet();
+    console.log(op_cmd);
+    if (op_cmd == "stop") {
+        for (let i = 0; i < jum_sesi; i++) {
+            console.log("|" + i + " Menutup sesi " + data_sesi[i]);
+            await stop_sesi(data_sesi[i]);
+        }
+
+    }
 
     try {
 
@@ -152,7 +160,7 @@ async function get_sesi(ds) {
                 form: {
                     "currency": "trx",
                     "game": "dice",
-                    "amount": "0.00000001",
+                    "amount": "0.000001",
                     "multiplier": "1.98",
                     "rule": "under",
                     "bet_value": "50",
