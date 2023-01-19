@@ -24,9 +24,7 @@ if (jum_sesi == "") {
     try {
 
         for (let cs = 0; cs < jum_sesi; cs++) {
-            await get_sesi(cs);
-            console.log(data_sesi[cs]);
-
+            data_sesi[cs] = "";
         }
 
         for (let i = 0; i < data_sesi.length; i++) {
