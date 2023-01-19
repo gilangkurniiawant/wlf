@@ -22,6 +22,7 @@ if (jum_sesi == "") {
     await get_token();
 
     try {
+
         for (let cs = 0; cs < jum_sesi; cs++) {
             await get_sesi(cs);
             console.log(data_sesi[cs]);
@@ -152,12 +153,12 @@ async function get_sesi(ds) {
                         if (body.error == "Too Many Attempts.") {
                             console.log("Terlalu Banyak Sesi");
                             await delay(60000);
-                            get_sesi();
+                            get_sesi(ds);
                         }
-                        get_sesi();
+                        get_sesi(ds);
                     } else {
                         console.log("Gagal Mendapatkan Sesi Pharse : " + JSON.stringify(body));
-                        get_sesi();
+                        get_sesi(ds);
                     }
                 } catch (e) {
                     console.log("Gagal Mendapatkan Sesi Body : " + e);
