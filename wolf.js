@@ -97,7 +97,7 @@ process.on("SIGINT", async() => {
     end_sesi = true;
     console.log(" [+] Menutup program");
     for (let i = 0; i < data_sesi.length; i++) {
-        console.log("Menutup sesi " + data_sesi[i]);
+        console.log("|" + i + " Menutup sesi " + data_sesi[i]);
         await stop_sesi(data_sesi[i]);
 
     }
@@ -149,7 +149,7 @@ async function get_sesi(ds) {
                         resolve(1);
                     } else if (body.hasOwnProperty("error")) {
                         if (body.error == "Too Many Attempts.") {
-                            console.log("Terlalu Banyak Sesi");
+                            console.log("Terlalu Banyak Sesi " + ds);
                             await delay(60000);
                             await get_sesi(ds);
                         }
