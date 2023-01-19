@@ -10,8 +10,7 @@ var headers = {
 };
 
 
-
-jum_sesi = jum_sesi = process.argv.slice(2),
+jum_sesi = process.argv.slice(2),
     end_sesi = false;
 x = 0;
 if (jum_sesi == "") {
@@ -145,13 +144,12 @@ async function get_sesi(ds) {
             },
             function(e, r, body) {
                 try {
-
-
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("autoBet")) {
                         data_sesi[ds] = body.autoBet.uuid;
                         resolve(1);
                     } else {
+                        console.log("Gagal Mendapatkan Sesi : " + JSON.stringify(body));
                         resolve(1);
                         //  get_sesi();
                     }
