@@ -138,7 +138,7 @@ async function bet(cnom) {
                             bet(cnom);
                             resolve(1);
                         } else if (body.hasOwnProperty("error")) {
-                            if (body.error.message == "Auto-bet has ended or not exists.") {
+                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
                                 console.log("Sesi Berakhir");
                                 await get_sesi(cnom);
                                 bet(cnom);
