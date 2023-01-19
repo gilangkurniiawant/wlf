@@ -153,7 +153,7 @@ async function get_sesi(ds) {
                         if (body.error == "Too Many Attempts.") {
                             console.log("Terlalu Banyak Sesi");
                             await delay(60000);
-                            get_sesi(ds);
+                            await get_sesi(ds);
                         }
                         get_sesi(ds);
                     } else {
