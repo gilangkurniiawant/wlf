@@ -142,16 +142,22 @@ async function get_sesi(ds) {
                 },
                 headers: headers
             },
-            function(e, r, body) {
+            async function(e, r, body) {
                 try {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("autoBet")) {
                         data_sesi[ds] = body.autoBet.uuid;
                         resolve(1);
-                    } else {
+                    } else if (body.hasOwnProperty("error")) {
+                        if (body.error == "Too Many Attempts.") {
+                            console.log("Terlalu Banyak Sesi");
+                            await delay(60000);
+                            get_sesi();
+                        }
+                        get_sesi();
+                    } {
                         console.log("Gagal Mendapatkan Sesi : " + JSON.stringify(body));
-                        resolve(1);
-                        //  get_sesi();
+                        get_sesi();
                     }
                 } catch (e) {
                     console.log("Gagal Mendapatkan Sesi : " + e);
