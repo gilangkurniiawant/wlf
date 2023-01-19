@@ -64,6 +64,7 @@ async function bet(cnom) {
                     if (data_sesi[cnom] == "") {
                         console.log("Mendapatkan Sesi " + cnom);
                         await get_sesi(cnom);
+                        await delay(10000);
                     }
 
 
