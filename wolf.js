@@ -155,12 +155,12 @@ async function get_sesi(ds) {
                             get_sesi();
                         }
                         get_sesi();
-                    } {
-                        console.log("Gagal Mendapatkan Sesi : " + JSON.stringify(body));
+                    } else {
+                        console.log("Gagal Mendapatkan Sesi Pharse : " + JSON.stringify(body));
                         get_sesi();
                     }
                 } catch (e) {
-                    console.log("Gagal Mendapatkan Sesi : " + e);
+                    console.log("Gagal Mendapatkan Sesi Body : " + e);
                     get_sesi(ds);
                 }
 
