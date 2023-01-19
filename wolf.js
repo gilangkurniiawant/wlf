@@ -34,7 +34,6 @@ try {
 (async() => {
     await get_token();
     await get_largebet();
-    console.log(op_cmd);
     if (op_cmd == "stop") {
         for (let i = 0; i < jum_sesi; i++) {
             console.log("|" + i + " Menutup sesi " + data_sesi[i]);
@@ -110,6 +109,7 @@ async function bet(cnom) {
                             }
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             bet(cnom);
+                            resolve(1);
                         } else if (body.hasOwnProperty("error")) {
                             if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
                                 console.log("Sesi Berakhir");
