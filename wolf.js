@@ -86,7 +86,7 @@ try {
 async function bet(cnom) {
     d = new Date();
     minutes = d.getMinutes();
-    if (minutes == 59) {
+    if (minutes == 15) {
         if (!r_seed) {
             await delay(10 * 1000);
             await rotate_seed();
