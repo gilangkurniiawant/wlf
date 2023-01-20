@@ -17,7 +17,7 @@ var jum_sesi = process.argv.slice(2)[0],
     end_sesi = false,
     bet_besar = 0,
     myip = ip.address(),
-    base_bet = 0.0000001,
+    base_bet = 0.00000001,
     r_seed = false,
     lb;
 x = 0;
