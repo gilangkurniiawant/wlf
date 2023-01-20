@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.00001,
+    base_bet = 0.0000001,
     r_seed = false,
     lb;
 x = 0;
@@ -131,9 +131,9 @@ async function bet(cnom) {
                                 bet_besar = body.bet.amount;
                             }
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
-                            if (body.bet.amount > (base_bet * 100)) { //20000
-                                if (body.bet.amount > (base_bet * 100)) { //100000
-                                    //await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                            if (body.bet.amount > (base_bet * 20000)) {
+                                if (body.bet.amount > (base_bet * 100000)) {
+                                    await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 }
                                 if (body.bet.state !== "loss") {
                                     await stop_sesi(cnom);
@@ -141,7 +141,7 @@ async function bet(cnom) {
                                 }
                                 await delay(1500);
                             }
-                            if (body.bet.amount > 1) {
+                            if (body.bet.amount > 15) {
                                 await tele("Bet Dihentikan " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
@@ -205,9 +205,9 @@ async function get_sesi(ds) {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "1.1",
+                    "multiplier": "2",
                     "rule": "under",
-                    "bet_value": "90",
+                    "bet_value": "49.5",
                     "config": [{
                         "command": [{
                             "name": "resetAmount"
@@ -220,21 +220,12 @@ async function get_sesi(ds) {
                     }, {
                         "command": [{
                             "name": "increaseAmountPercent",
-                            "value": 1000
+                            "value": 100
                         }],
                         "when": [{
                             "name": "lose",
                             "value": 1,
                             "type": "every"
-                        }]
-                    }, {
-                        "command": [{
-                            "name": "stop"
-                        }],
-                        "when": [{
-                            "name": "loss",
-                            "value": 15,
-                            "type": "before"
                         }]
                     }]
                 },
