@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.000001,
+    base_bet = 0.000005,
     r_seed = false,
     lb;
 x = 0;
@@ -134,6 +134,12 @@ async function bet(cnom) {
                                     await get_sesi(cnom);
                                 }
                                 await delay(1500);
+                            }
+                            if (body.bet.amount > 15) {
+                                await tele("Bet Dihentikan " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                                await stop_sesi(cnom);
+                                await get_sesi(cnom);
+                                await delay(7500);
                             }
                             bet(cnom);
                             resolve(1);
