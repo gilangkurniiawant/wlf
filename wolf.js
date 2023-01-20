@@ -145,7 +145,7 @@ async function bet(cnom) {
                                 resolve(1);
                             } else {
                                 console.log("Gagal " + cnom + " : " + JSON.stringify(body));
-                                tele("Gagal " + cnom + " : " + JSON.stringify(body));
+                                //tele("Gagal " + cnom + " : " + JSON.stringify(body));
                                 bet(cnom);
                                 resolve(1);
                             }
