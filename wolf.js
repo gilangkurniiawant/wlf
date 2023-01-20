@@ -3,6 +3,7 @@ const readlineSync = require('readline-sync');
 const delay = require('delay');
 var uuide, sesi = 1,
     data_sesi = [];
+var ip = require("ip");
 
 var headers = {
     'authorization': 'Bearer ',
@@ -15,7 +16,8 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.00000001,
+    myip = ip.address(),
+    base_bet = 0.0000001,
     r_seed = false,
     lb;
 x = 0;
@@ -33,7 +35,6 @@ try {
 } catch (error) {
     var data_sesi = [];
 }
-
 
 
 (async() => {
@@ -133,7 +134,7 @@ async function bet(cnom) {
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             if (body.bet.amount > (base_bet * 20000)) {
                                 if (body.bet.amount > (base_bet * 100000)) {
-                                    await tele("Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                                    await tele(myip + " |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 }
                                 if (body.bet.state !== "loss") {
                                     await stop_sesi(cnom);
