@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.0001,
+    base_bet = 0.000025,
     r_seed = false,
     lb;
 x = 0;
