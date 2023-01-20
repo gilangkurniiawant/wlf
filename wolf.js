@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.000025,
+    base_bet = 0.00001,
     r_seed = false,
     lb;
 x = 0;
@@ -205,9 +205,9 @@ async function get_sesi(ds) {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "2",
+                    "multiplier": "1.1",
                     "rule": "under",
-                    "bet_value": "49.5",
+                    "bet_value": "90",
                     "config": [{
                         "command": [{
                             "name": "resetAmount"
@@ -220,12 +220,21 @@ async function get_sesi(ds) {
                     }, {
                         "command": [{
                             "name": "increaseAmountPercent",
-                            "value": 100
+                            "value": 1000
                         }],
                         "when": [{
                             "name": "lose",
                             "value": 1,
                             "type": "every"
+                        }]
+                    }, {
+                        "command": [{
+                            "name": "stop"
+                        }],
+                        "when": [{
+                            "name": "loss",
+                            "value": 15,
+                            "type": "before"
                         }]
                     }]
                 },
