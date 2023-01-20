@@ -15,7 +15,7 @@ var jum_sesi = process.argv.slice(2)[0],
     op_cmd = process.argv.slice(2)[1],
     end_sesi = false,
     bet_besar = 0,
-    base_bet = 0.000001,
+    base_bet = 0.000005,
     r_seed = false,
     lb;
 x = 0;
@@ -115,7 +115,13 @@ async function bet(cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 1000) {
+                    if (all_exc > 1500) {
+                        await get_largebet();
+
+                        if (bet_besar > lb) {
+                            await set_largebet(bet_besar);
+                        }
+
                         process.exit();
                     }
                     try {
