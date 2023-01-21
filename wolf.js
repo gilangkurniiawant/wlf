@@ -41,7 +41,6 @@ try {
     await get_bet();
     await get_token();
     await get_largebet();
-    op_cmd = "stop";
     if (op_cmd == "stop") {
         for (let i = 0; i < jum_sesi; i++) {
             console.log("|" + i + " Menutup sesi " + data_sesi[i]);
@@ -52,8 +51,6 @@ try {
         process.exit();
 
     }
-    await delay(60000);
-    process.exit();
 
     try {
 
