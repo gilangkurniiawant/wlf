@@ -109,7 +109,7 @@ async function bet(jum_bet, cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 1000) {
+                    if (all_exc > 10000) {
 
                         await get_largebet();
 
