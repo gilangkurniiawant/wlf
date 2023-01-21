@@ -220,23 +220,35 @@ async function get_sesi(ds) {
                     "bet_value": "49.5",
                     "config": [{
                         "command": [{
-                            "name": "resetAmount"
+                            "name": "increaseAmountPercent",
+                            "value": 100
                         }],
                         "when": [{
                             "name": "win",
                             "value": 1,
                             "type": "every"
-                        }]
+                        }],
+                        "errors": false
                     }, {
                         "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": 100
+                            "name": "resetAmount"
                         }],
                         "when": [{
                             "name": "lose",
                             "value": 1,
                             "type": "every"
-                        }]
+                        }],
+                        "errors": false
+                    }, {
+                        "command": [{
+                            "name": "resetAmount"
+                        }],
+                        "when": [{
+                            "name": "win",
+                            "value": 3,
+                            "type": "streakGreater"
+                        }],
+                        "errors": false
                     }]
                 },
                 headers: headers,
