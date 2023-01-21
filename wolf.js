@@ -17,7 +17,7 @@ var jum_sesi = process.argv.slice(2)[0],
     end_sesi = false,
     bet_besar = 0,
     myip = ip.address(),
-    base_bet = 0.00000001,
+    base_bet,
     r_seed = false,
     lb;
 x = 0;
@@ -38,7 +38,7 @@ try {
 
 
 (async() => {
-
+    await get_bet();
     await get_token();
     await get_largebet();
     if (op_cmd == "stop") {
@@ -70,6 +70,7 @@ try {
     }
 
     while (1) {
+        await get_bet();
         await get_token();
         await get_largebet();
 
@@ -148,6 +149,14 @@ async function bet(cnom) {
                                 await get_sesi(cnom);
                                 await delay(7500);
                             }
+
+                            if (body.bet.amount < base_bet) {
+                                if (body.bet.state !== "loss") {
+                                    await stop_sesi(cnom);
+                                    await get_sesi(cnom);
+                                }
+                            }
+
                             bet(cnom);
                             resolve(1);
                         } else if (body.hasOwnProperty("error")) {
@@ -428,6 +437,32 @@ async function tele(data) {
                     set_largebet(data);
                 } else {
                     resolve(1);
+                }
+
+            });
+
+    });
+
+}
+
+async function get_bet() {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/wolf/bet.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Get Bet : " + e);
+                    get_bet();
+
+                } else {
+                    resolve(base_bet = Number(body));
                 }
 
             });
