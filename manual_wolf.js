@@ -17,7 +17,7 @@ var jum_sesi = process.argv.slice(2)[0],
     end_sesi = false,
     bet_besar = 0,
     myip = ip.address(),
-    base_bet = 0.0000001,
+    base_bet,
     r_seed = false,
     lb;
 x = 0;
@@ -39,11 +39,16 @@ try {
 
 (async() => {
 
+    await get_bet();
     await get_token();
     await get_largebet();
     try {
         for (let i = 0; i <= jum_sesi; i++) {
-            bet(base_bet, i);
+            if (data_sesi[i] > 0) {
+                bet(data_sesi[i], i);
+            } else {
+                bet(base_bet, i);
+            }
 
         }
 
@@ -81,8 +86,7 @@ async function bet(jum_bet, cnom) {
 
     }
     if (end_sesi) {
-
-        await delay(jum_sesi * 2000);
+        await delay(jum_sesi * 5000);
     }
 
     await new Promise((resolve) => {
@@ -104,13 +108,14 @@ async function bet(jum_bet, cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 1500) {
+                    if (all_exc > 1000) {
+                        fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
                         await get_largebet();
 
                         if (bet_besar > lb) {
                             await set_largebet(bet_besar);
                         }
-
+                        await delay(1000);
                         process.exit();
                     }
                     try {
@@ -125,6 +130,7 @@ async function bet(jum_bet, cnom) {
                             } else {
                                 jum_bet = jum_bet * 2;
                             }
+                            data_sesi[cnom] = jum_bet;
                             if (body.bet.amount > (base_bet * 20000)) {
                                 if (body.bet.amount > (base_bet * 100000)) {
                                     await tele(myip + " |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
@@ -154,14 +160,10 @@ async function bet(jum_bet, cnom) {
 
 process.on("SIGINT", async() => {
     end_sesi = true;
+    await delay(jum_sesi * 500);
     console.log(" [+] Menutup program");
-    /*
-    for (let i = 0; i < data_sesi.length; i++) {
-        console.log("|" + i + " Menutup sesi " + data_sesi[i]);
-        await stop_sesi(data_sesi[i]);
-
-    }
-    */
+    fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
+    await delay(2000);
     process.exit(0);
 })
 
@@ -398,6 +400,32 @@ async function tele(data) {
                     set_largebet(data);
                 } else {
                     resolve(1);
+                }
+
+            });
+
+    });
+
+}
+
+async function get_bet() {
+
+    await new Promise((resolve) => {
+
+
+        request.get({
+                url: "https://akun.vip/wolf/bet.txt",
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
+            },
+            function(e, r, body) {
+                if (e) {
+                    console.log("Gagal Mendapatkan Get Bet : " + e);
+                    get_bet();
+
+                } else {
+                    resolve(base_bet = Number(body));
                 }
 
             });
