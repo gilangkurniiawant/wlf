@@ -60,16 +60,9 @@ try {
             }
         }
 
-        if (jum_sesi <= 10) {
-            for (let i = 0; i <= jum_sesi; i++) {
-                bet(i);
+        for (let i = 0; i <= jum_sesi; i++) {
+            bet(i);
 
-            }
-        } else {
-            for (let i = 0; i <= 10; i++) {
-                bet(i);
-
-            }
         }
 
     } catch (e) {
@@ -142,7 +135,7 @@ async function bet(cnom) {
                             console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             if (body.bet.amount > (base_bet * 20000)) {
                                 if (body.bet.amount > (base_bet * 100000)) {
-                                    //await tele(myip + " |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                                    await tele(myip + " |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 }
                                 if (body.bet.state !== "loss") {
                                     await stop_sesi(cnom);
@@ -227,23 +220,35 @@ async function get_sesi(ds) {
                     "bet_value": "49.5",
                     "config": [{
                         "command": [{
-                            "name": "resetAmount"
+                            "name": "increaseAmountPercent",
+                            "value": 100
                         }],
                         "when": [{
                             "name": "win",
                             "value": 1,
                             "type": "every"
-                        }]
+                        }],
+                        "errors": false
                     }, {
                         "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": 100
+                            "name": "resetAmount"
                         }],
                         "when": [{
                             "name": "lose",
                             "value": 1,
                             "type": "every"
-                        }]
+                        }],
+                        "errors": false
+                    }, {
+                        "command": [{
+                            "name": "resetAmount"
+                        }],
+                        "when": [{
+                            "name": "win",
+                            "value": 3,
+                            "type": "streakGreater"
+                        }],
+                        "errors": false
                     }]
                 },
                 headers: headers,
