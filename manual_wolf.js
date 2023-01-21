@@ -86,6 +86,7 @@ async function bet(jum_bet, cnom) {
 
     }
     if (end_sesi) {
+        await ens_sesi();
         await delay(jum_sesi * 5000);
     }
 
@@ -109,14 +110,13 @@ async function bet(jum_bet, cnom) {
                 async function(e, r, body) {
                     all_exc++;
                     if (all_exc > 1000) {
-                        fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
+
                         await get_largebet();
 
                         if (bet_besar > lb) {
                             await set_largebet(bet_besar);
                         }
-                        await delay(1000);
-                        process.exit();
+                        end_sesi = true;
                     }
                     try {
                         body = JSON.parse(body);
@@ -140,7 +140,10 @@ async function bet(jum_bet, cnom) {
                             bet(jum_bet, cnom);
                             resolve(1);
                         } else {
-                            console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                            if (body.error !== "You can play only one bet at a time.") {
+                                console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+
+                            }
                             bet(jum_bet, cnom);
                             resolve(1);
                         }
@@ -159,13 +162,21 @@ async function bet(jum_bet, cnom) {
 }
 
 process.on("SIGINT", async() => {
+    await ens_sesi();
+    process.exit(0);
+})
+
+
+async function ens_sesi() {
     end_sesi = true;
     await delay(jum_sesi * 500);
     console.log(" [+] Menutup program");
     fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
     await delay(2000);
     process.exit(0);
-})
+
+}
+
 
 async function get_sesi(ds) {
 
