@@ -53,6 +53,7 @@ try {
 
     }
     await delay(60000);
+    process.exit();
 
     try {
 
