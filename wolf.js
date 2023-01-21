@@ -60,9 +60,16 @@ try {
             }
         }
 
-        for (let i = 0; i <= jum_sesi; i++) {
-            bet(i);
+        if (jum_sesi <= 10) {
+            for (let i = 0; i <= jum_sesi; i++) {
+                bet(i);
 
+            }
+        } else {
+            for (let i = 0; i <= 10; i++) {
+                bet(i);
+
+            }
         }
 
     } catch (e) {
@@ -220,35 +227,23 @@ async function get_sesi(ds) {
                     "bet_value": "49.5",
                     "config": [{
                         "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": 100
+                            "name": "resetAmount"
                         }],
                         "when": [{
                             "name": "win",
                             "value": 1,
                             "type": "every"
-                        }],
-                        "errors": false
+                        }]
                     }, {
                         "command": [{
-                            "name": "resetAmount"
+                            "name": "increaseAmountPercent",
+                            "value": 100
                         }],
                         "when": [{
                             "name": "lose",
                             "value": 1,
                             "type": "every"
-                        }],
-                        "errors": false
-                    }, {
-                        "command": [{
-                            "name": "resetAmount"
-                        }],
-                        "when": [{
-                            "name": "win",
-                            "value": 3,
-                            "type": "streakGreater"
-                        }],
-                        "errors": false
+                        }]
                     }]
                 },
                 headers: headers,
