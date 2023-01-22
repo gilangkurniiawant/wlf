@@ -124,7 +124,7 @@ async function bet(cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 1500) {
+                    if (all_exc > 2500) {
                         await get_largebet();
 
                         if (bet_besar > lb) {
