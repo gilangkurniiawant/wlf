@@ -59,16 +59,9 @@ try {
             }
         }
 
-        if (jum_sesi <= 10) {
-            for (let i = 0; i <= jum_sesi; i++) {
-                bet(i);
 
-            }
-        } else {
-            for (let i = 0; i <= 10; i++) {
-                bet(i);
-
-            }
+        for (let i = 0; i <= jum_sesi; i++) {
+            bet(i);
 
         }
 
