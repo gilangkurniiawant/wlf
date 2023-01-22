@@ -38,6 +38,7 @@ try {
 (async() => {
     await get_bet();
     await get_token();
+
     await get_largebet();
     if (op_cmd == "stop") {
         for (let i = 0; i < jum_sesi; i++) {
@@ -114,7 +115,7 @@ async function bet(cnom) {
 
         if (sesi == 1) {
             request.post({
-                    url: 'https://wolf.bet/api/v2/dice/auto/play/',
+                    url: "https://wolf.bet/api/v2/range-dice/auto/play",
                     form: {
                         uuid: data_sesi[cnom]
                     },
@@ -138,7 +139,7 @@ async function bet(cnom) {
                             if (bet_besar < body.bet.amount) {
                                 bet_besar = body.bet.amount;
                             }
-                            console.log("| " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
+                            console.log(r.headers['x-ratelimit-remaining'] + " | " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
                             if (body.bet.amount > (base_bet * 20000)) {
                                 if (body.bet.amount > (base_bet * 100000)) {
                                     await tele(" |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
@@ -166,7 +167,7 @@ async function bet(cnom) {
                             bet(cnom);
                             resolve(1);
                         } else if (body.hasOwnProperty("error")) {
-                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID.") {
+                            if (body.error.message == "Auto-bet has ended or not exists." || body.error.message == "The uuid must be a valid UUID." || body.error.message == "Session has ended or not exists.") {
                                 console.log("Sesi Berakhir");
                                 await get_sesi(cnom);
                                 bet(cnom);
@@ -213,18 +214,29 @@ process.on("SIGINT", async() => {
 async function get_sesi(ds) {
 
     await new Promise((resolve) => {
-
+        let roll_atas = randomNomer(50, 100);
+        let roll_bawah = roll_atas - 49.5;
 
         request.post({
-                url: "https://wolf.bet/api/v2/dice/auto/start",
+                url: "https://wolf.bet/api/v2/range-dice/auto/start",
                 form: {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "2",
-                    "rule": "under",
-                    "bet_value": "49.5",
+                    "multiplier": "2.0004",
+                    "rule": "between",
+                    "bet_value_first": roll_bawah,
+                    "bet_value_second": roll_atas,
                     "config": [{
+                        "command": [{
+                            "name": "resetAmount"
+                        }],
+                        "when": [{
+                            "name": "win",
+                            "value": 1,
+                            "type": "every"
+                        }]
+                    }, {
                         "command": [{
                             "name": "increaseAmountPercent",
                             "value": 100
@@ -233,44 +245,23 @@ async function get_sesi(ds) {
                             "name": "lose",
                             "value": 1,
                             "type": "every"
-                        }],
-                        "errors": false
+                        }]
                     }, {
                         "command": [{
-                            "name": "resetAmount"
+                            "name": "stop"
                         }],
                         "when": [{
-                            "name": "win",
-                            "value": 1,
-                            "type": "every"
-                        }],
-                        "errors": false
-                    }, {
-                        "command": [{
-                            "name": "switch"
-                        }],
-                        "when": [{
-                            "name": "lose",
-                            "value": 2,
-                            "type": "streakGreater"
-                        }],
-                        "errors": false
-                    }, {
-                        "command": [{
-                            "name": "switch"
-                        }],
-                        "when": [{
-                            "name": "win",
-                            "value": 1,
-                            "type": "streakGreater"
-                        }],
-                        "errors": false
+                            "name": "loss",
+                            "value": 15,
+                            "type": "before"
+                        }]
                     }]
                 },
                 headers: headers,
                 timeout: 5000
             },
             async function(e, r, body) {
+                console.log(body);
                 try {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("autoBet")) {
@@ -497,4 +488,11 @@ async function get_bet() {
 
     });
 
+}
+
+
+function randomNomer(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
