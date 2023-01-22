@@ -124,7 +124,7 @@ async function bet(cnom) {
                 },
                 async function(e, r, body) {
                     all_exc++;
-                    if (all_exc > 1000) {
+                    if (all_exc > 2500) {
                         await get_largebet();
 
                         if (bet_besar > lb) {
@@ -150,7 +150,7 @@ async function bet(cnom) {
                                 }
                                 await delay(1500);
                             }
-                            if (body.bet.amount > 3) {
+                            if (body.bet.amount > 2) {
                                 await tele("Bet Dihentikan " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
