@@ -387,15 +387,13 @@ async function rotate_clint(rx = 0) {
                     console.log(body);
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("seed")) {
-                        console.log("Berhasil Rotate Clint ");
-                        if (rx == 0) {
-                            tele("Rotate Clint : " + body.seed);
-                        }
+                        // console.log("Berhasil Rotate Clint ");
+
                         resolve(1);
 
                     } else if (body.hasOwnProperty("error")) {
                         if (body.error == "Game in progress. Can not change server seed.") {
-                            console.log("Game Proses Rotate Clint");
+                            //  console.log("Game Proses Rotate Clint");
                             rotate_clint();
                             resolve(1);
                         }
