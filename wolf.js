@@ -88,6 +88,7 @@ try {
         }
 
         await delay(60 * 1000);
+        process.exit();
 
     }
 
