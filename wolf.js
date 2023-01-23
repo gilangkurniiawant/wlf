@@ -53,7 +53,7 @@ try {
     }
 
     if (op_cmd == "new") {
-        fs.writeFileSync('./modul/wolf.json', JSON.stringify(data_sesi));
+        fs.writeFileSync('./modul/wolf.json', JSON.stringify([]));
         console.log("Sesi Baru Dibuat");
         process.exit();
 
