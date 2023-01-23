@@ -387,7 +387,7 @@ async function rotate_clint(rx = 0) {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("seed")) {
                         console.log("Berhasil Rotate Clint ");
-                        if (rx !== 0) {
+                        if (rx == 0) {
                             tele("Rotate Clint : " + body.seed);
                         }
                         resolve(1);
