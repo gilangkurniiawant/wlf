@@ -36,7 +36,8 @@ try {
 
 
 (async() => {
-
+    op_cmd = "new";
+    await delay(300000);
 
     await get_bet();
     await get_token();
@@ -229,41 +230,28 @@ async function get_sesi(ds) {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "2.0004",
+                    "multiplier": "1.0103",
                     "rule": "between",
-                    "bet_value_first": roll_bawah,
-                    "bet_value_second": roll_atas,
+                    "bet_value_first": "1",
+                    "bet_value_second": "99",
                     "config": [{
                         "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": "100"
+                            "name": "resetAmount"
                         }],
                         "when": [{
-                            "value": "1",
                             "name": "win",
+                            "value": 1,
                             "type": "every"
-                        }],
-                        "errors": false
+                        }]
                     }, {
                         "command": [{
                             "name": "resetAmount"
                         }],
                         "when": [{
-                            "name": "win",
-                            "value": "3",
-                            "type": "streakGreater"
-                        }],
-                        "errors": false
-                    }, {
-                        "command": [{
-                            "name": "resetAmount"
-                        }],
-                        "when": [{
-                            "value": "1",
                             "name": "lose",
+                            "value": 1,
                             "type": "every"
-                        }],
-                        "errors": false
+                        }]
                     }]
                 },
                 headers: headers,
