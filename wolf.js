@@ -36,8 +36,6 @@ try {
 
 
 (async() => {
-    op_cmd= "new"
-    await delay(60000);
     await get_bet();
     await get_token();
 
@@ -145,10 +143,6 @@ async function bet(cnom) {
                             }
                             console.log(r.headers['x-ratelimit-remaining'] + " | " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
 
-                            if (body.bet.state == "loss") {
-                               // await tele(" |Loss " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
-
-                            }
                             if (body.bet.amount > (base_bet * 20000)) {
                                 if (body.bet.amount > (base_bet * 100000)) {
                                     await tele(" |Bet Besar Terjadi " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
@@ -158,16 +152,8 @@ async function bet(cnom) {
                                     await get_sesi(cnom);
                                 }
                                 await delay(1500);
-                            }
-                            if (body.bet.amount > (base_bet * 100000)) {
-                                await tele("[" + body.bet.state + "] Bet Dihentikan " + body.bet.amount);
-                                set_largebet(base_bet);
                                 rotate_clint();
-                                await stop_sesi(cnom);
-                                await get_sesi(cnom);
-                                await delay(7500);
                             }
-
                             if (body.bet.amount < base_bet) {
                                 if (body.bet.state !== "loss") {
                                     await stop_sesi(cnom);
@@ -234,10 +220,10 @@ async function get_sesi(ds) {
                     "currency": "trx",
                     "game": "dice",
                     "amount": base_bet.toString(),
-                    "multiplier": "1.0103",
+                    "multiplier": "2.0004",
                     "rule": "between",
-                    "bet_value_first": "1",
-                    "bet_value_second": "99",
+                    "bet_value_first": roll_bawah,
+                    "bet_value_second": roll_atas,
                     "config": [{
                         "command": [{
                             "name": "resetAmount"
@@ -249,7 +235,8 @@ async function get_sesi(ds) {
                         }]
                     }, {
                         "command": [{
-                            "name": "resetAmount"
+                            "name": "increaseAmountPercent",
+                            "value": 100
                         }],
                         "when": [{
                             "name": "lose",
