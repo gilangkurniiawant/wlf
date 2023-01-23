@@ -36,8 +36,7 @@ try {
 
 
 (async() => {
-    op_cmd = "new";
-    await delay(60000);
+
     await get_bet();
     await get_token();
 
