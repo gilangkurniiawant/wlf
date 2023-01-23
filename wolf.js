@@ -153,6 +153,7 @@ async function bet(cnom) {
                             }
                             if (body.bet.amount > (base_bet * 100000)) {
                                 await tele("[" + body.bet.state + "] Bet Dihentikan " + body.bet.amount);
+                                set_largebet(base_bet);
                                 await rotate_clint();
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
@@ -488,6 +489,7 @@ async function set_largebet(data) {
     });
 
 }
+
 
 async function tele(data) {
 
