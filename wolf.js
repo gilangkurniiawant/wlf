@@ -153,6 +153,7 @@ async function bet(cnom) {
                             }
                             if (body.bet.amount > (base_bet * 100000)) {
                                 await tele("[" + body.bet.state + "] Bet Dihentikan " + body.bet.amount);
+                                await rotate_clint();
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
                                 await delay(7500);
@@ -363,6 +364,54 @@ async function rotate_seed() {
 
 }
 
+async function rotate_clint() {
+
+    await new Promise((resolve) => {
+
+        request.post({
+                url: "https://wolf.bet/api/v1/user/seed/refresh",
+                form: {
+                    "client_seed": makeid(Math.floor(Math.random() * (64 - 10 + 1)) + 10)
+                },
+                agentOptions: {
+                    rejectUnauthorized: false
+                },
+                headers: headers,
+                timeout: 10000
+            },
+            function(e, r, body) {
+                try {
+                    console.log(body);
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("seed")) {
+                        console.log("Berhasil Rotate Clint ");
+
+                        resolve(1);
+
+                    } else if (body.hasOwnProperty("error")) {
+                        if (body.error == "Game in progress. Can not change server seed.") {
+                            console.log("Game Proses Rotate Clint");
+                            rotate_clint();
+                            resolve(1);
+                        }
+
+                    } else {
+                        console.log("Gagal Rotate Clint : " + JSON.stringify(body));
+                        resolve(1);
+                    }
+                } catch (e) {
+                    console.log("ERR Gagal Rotate Seed : " + e);
+                    resolve(1);
+
+                }
+
+            });
+
+    });
+
+}
+
+
 async function get_token() {
 
     await new Promise((resolve) => {
@@ -496,4 +545,14 @@ function randomNomer(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
