@@ -36,6 +36,8 @@ try {
 
 
 (async() => {
+    op_cmd = "new";
+    await delay(60000);
     await get_bet();
     await get_token();
 
@@ -150,7 +152,7 @@ async function bet(cnom) {
                                 }
                                 await delay(1500);
                             }
-                            if (body.bet.amount > 1) {
+                            if (body.bet.amount > 2) {
                                 await tele("Bet Dihentikan " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
