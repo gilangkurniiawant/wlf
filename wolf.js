@@ -78,6 +78,7 @@ try {
     }
 
     while (1) {
+        rotate_clint(1);
         await get_bet();
         await get_token();
         await get_largebet();
@@ -365,7 +366,7 @@ async function rotate_seed() {
 
 }
 
-async function rotate_clint() {
+async function rotate_clint(rx = 0) {
 
     await new Promise((resolve) => {
 
@@ -386,8 +387,9 @@ async function rotate_clint() {
                     body = JSON.parse(body);
                     if (body.hasOwnProperty("seed")) {
                         console.log("Berhasil Rotate Clint ");
-                        tele("Rotate Clint : " + body.seed);
-
+                        if (rx !== 0) {
+                            tele("Rotate Clint : " + body.seed);
+                        }
                         resolve(1);
 
                     } else if (body.hasOwnProperty("error")) {
