@@ -152,7 +152,7 @@ async function bet(cnom) {
                                 await delay(1500);
                             }
                             if (body.bet.amount > (base_bet * 100000)) {
-                                await tele("Bet Dihentikan " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                                await tele("[" + body.bet.state + "] Bet Dihentikan " + body.bet.amount);
                                 await stop_sesi(cnom);
                                 await get_sesi(cnom);
                                 await delay(7500);
