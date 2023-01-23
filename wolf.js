@@ -234,32 +234,35 @@ async function get_sesi(ds) {
                     "bet_value_second": roll_atas,
                     "config": [{
                         "command": [{
+                            "name": "increaseAmountPercent",
+                            "value": "100"
+                        }],
+                        "when": [{
+                            "value": "1",
+                            "name": "win",
+                            "type": "every"
+                        }],
+                        "errors": false
+                    }, {
+                        "command": [{
                             "name": "resetAmount"
                         }],
                         "when": [{
                             "name": "win",
-                            "value": 1,
-                            "type": "every"
-                        }]
+                            "value": "3",
+                            "type": "streakGreater"
+                        }],
+                        "errors": false
                     }, {
                         "command": [{
-                            "name": "increaseAmountPercent",
-                            "value": 100
+                            "name": "resetAmount"
                         }],
                         "when": [{
+                            "value": "1",
                             "name": "lose",
-                            "value": 1,
                             "type": "every"
-                        }]
-                    }, {
-                        "command": [{
-                            "name": "stop"
                         }],
-                        "when": [{
-                            "name": "loss",
-                            "value": base_bet * 80000 * 2,
-                            "type": "gt"
-                        }]
+                        "errors": false
                     }]
                 },
                 headers: headers,
