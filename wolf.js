@@ -255,8 +255,8 @@ async function get_sesi(ds) {
                         }],
                         "when": [{
                             "name": "loss",
-                            "value": 15,
-                            "type": "before"
+                            "value": base_bet * 80000 * 2,
+                            "type": "gt"
                         }]
                     }]
                 },
