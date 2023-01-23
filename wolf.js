@@ -217,7 +217,7 @@ process.on("SIGINT", async() => {
 async function get_sesi(ds) {
 
     await new Promise((resolve) => {
-        let roll_atas = randomNomer(50, 100);
+        let roll_atas = randomNomer(50, 90);
         let roll_bawah = roll_atas - 49.5;
 
         request.post({
