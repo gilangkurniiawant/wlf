@@ -144,7 +144,7 @@ async function bet(cnom) {
                             console.log(r.headers['x-ratelimit-remaining'] + " | " + cnom + "# " + all_exc + " " + body.bet.state + " - " + body.bet.amount + " - " + body.bet.profit + " | " + body.userBalance.amount + "- |" + bet_besar + "-" + lb + "| #" + data_sesi[cnom]);
 
                             if (body.bet.state == "loss") {
-                                await tele(" |Loss " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
+                               // await tele(" |Loss " + body.bet.amount + " https://wolf.bet/user/transactions?betType=dice&id=" + body.bet.hash + "&modal=bet | Session : https://wolf.bet/user/transactions?betType=session&id=" + data_sesi[cnom] + "&modal=session&table=sessions");
 
                             }
                             if (body.bet.amount > (base_bet * 20000)) {
