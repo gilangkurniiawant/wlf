@@ -60,7 +60,7 @@ try {
 
     try {
 
-        for (let cs = 0; cs <= jum_sesi; cs++) {
+        for (let cs = 0; cs <= 100; cs++) {
             if (data_sesi[cs] == undefined || data_sesi[cs] == "sesi") {
                 data_sesi[cs] = "290724bb-4a4f-4e2f-b5ce-2f8727f4639b";
             }
@@ -95,6 +95,7 @@ try {
 })();
 
 async function bet(cnom) {
+await delay(2000);
     d = new Date();
     minutes = d.getMinutes();
     if (minutes == 15) {
