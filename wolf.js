@@ -67,7 +67,7 @@ try {
         }
 
 
-        for (let i = 0; i <= jum_sesi; i++) {
+        for (let i = 0; i <= 100; i++) {
             bet(i);
 
         }
