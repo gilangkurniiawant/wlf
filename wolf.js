@@ -183,7 +183,7 @@ await delay(2000);
                             resolve(1);
                         }
                     } catch (e) {
-                        console.log("Gagal " + cnom + " : " + JSON.stringify(body));
+                        console.log("Gagal " + cnom + " : " + JSON.stringify(body))+ " "+e;
                         await delay(5000);
                         bet(cnom);
                         resolve(1);
