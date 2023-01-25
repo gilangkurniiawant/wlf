@@ -60,14 +60,14 @@ try {
 
     try {
 
-        for (let cs = 0; cs <= 3; cs++) {
+        for (let cs = 0; cs <= 100; cs++) {
             if (data_sesi[cs] == undefined || data_sesi[cs] == "sesi") {
                 data_sesi[cs] = "290724bb-4a4f-4e2f-b5ce-2f8727f4639b";
             }
         }
 
 
-        for (let i = 0; i <= 3; i++) {
+        for (let i = 0; i <= 100; i++) {
             bet(i);
 
         }
