@@ -95,7 +95,6 @@ try {
 })();
 
 async function bet(cnom) {
-await delay(2000);
     d = new Date();
     minutes = d.getMinutes();
     if (minutes == 15) {
